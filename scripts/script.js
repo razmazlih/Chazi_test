@@ -16,8 +16,8 @@ function checkAuthState() {
 async function addMessageToFirebase(userId, type, text) {
     try {
         await addDoc(collection(firestore, `users/${userId}/messages`), {
-            type: type,
-            text: text,
+            type,
+            text,
             timestamp: serverTimestamp()
         });
         console.log("Message added to Firebase");
@@ -83,6 +83,4 @@ function addEventListeners(userId) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    checkAuthState();
-});
+document.addEventListener('DOMContentLoaded', checkAuthState);

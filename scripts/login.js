@@ -7,8 +7,7 @@ async function loginUser(e) {
     const password = document.getElementById('password').value;
 
     try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+        await signInWithEmailAndPassword(auth, email, password);
         window.location.href = 'index.html';
     } catch (error) {
         console.error('Error logging in user:', error);

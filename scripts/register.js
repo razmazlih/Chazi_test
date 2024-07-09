@@ -13,8 +13,8 @@ async function registerUser(e) {
         const user = userCredential.user;
 
         await setDoc(doc(firestore, 'users', user.uid), {
-            name: name,
-            email: email
+            name,
+            email
         });
 
         window.location.href = 'index.html';
