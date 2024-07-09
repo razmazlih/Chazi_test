@@ -40,7 +40,7 @@ function loadMessagesFromFirebase(userId) {
 function addMessage(type, text, timestamp) {
     const message = document.createElement('div');
     message.classList.add('message', type);
-    const imgSrc = type === 'sent' ? 'images/user.png' : 'images/bot.png';
+    const imgSrc = type === 'sent' ? 'images/my_image.png' : 'images/bot_image.png';
     const timeString = timestamp ? new Date(timestamp.seconds * 1000).toLocaleTimeString('he-IL') : '';
     message.innerHTML = `<img src="${imgSrc}" alt="${type}"><div class="${type} message-content"><p>${text}</p><span class="timestamp">${timeString}</span></div>`;
     const chatWindow = document.querySelector('.chat-window');
