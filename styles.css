@@ -1,3 +1,4 @@
+/* הגדרות כלליות */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -11,6 +12,9 @@ header {
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 header .logo img {
@@ -48,6 +52,7 @@ header h1 {
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .message-content {
@@ -55,6 +60,7 @@ header h1 {
     padding: 10px;
     border-radius: 15px;
     position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .message.received {
@@ -84,12 +90,17 @@ footer {
     background-color: #ffffff;
     padding: 10px;
     border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .input-bar {
     display: flex;
     align-items: center;
     gap: 10px;
+    width: 100%;
+    max-width: 800px;
 }
 
 .input-bar input {
@@ -97,12 +108,24 @@ footer {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 25px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s;
+}
+
+.input-bar input:focus {
+    border-color: #d94f0b;
 }
 
 .input-bar button {
     background-color: transparent;
     border: none;
     cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s;
+}
+
+.input-bar button:hover {
+    transform: scale(1.2);
 }
 
 .mic-icon::before {
@@ -123,10 +146,12 @@ footer {
     background-color: #fff;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .form-container h2 {
     margin-bottom: 20px;
+    color: #d94f0b;
 }
 
 .form-container input {
@@ -135,6 +160,11 @@ footer {
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.form-container input:focus {
+    border-color: #d94f0b;
 }
 
 .form-container button {
@@ -145,6 +175,7 @@ footer {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .form-container button:hover {
@@ -154,6 +185,16 @@ footer {
 .form-container p {
     margin-top: 10px;
 }
+
+.form-container a {
+    color: #d94f0b;
+    text-decoration: none;
+}
+
+.form-container a:hover {
+    text-decoration: underline;
+}
+
 .logout-button {
     position: absolute;
     top: 10px;
@@ -164,6 +205,7 @@ footer {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .logout-button:hover {

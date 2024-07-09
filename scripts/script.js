@@ -32,7 +32,7 @@ function loadMessagesFromFirebase(userId) {
         chatWindow.innerHTML = '';
         snapshot.forEach((doc) => {
             const messageData = doc.data();
-            addMessage(messageData.type, messageData.text, messageData.timestamp);
+            addMessage(messageData.type, messageData.text);
         });
     });
 }

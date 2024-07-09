@@ -17,11 +17,9 @@ async function registerUser(e) {
             email
         });
 
-        alert('Registration successful! Redirecting to chat...');
         window.location.href = 'index.html';
     } catch (error) {
         console.error('Error registering user:', error);
-        alert(`Error: ${error.message}`);
     }
 }
 

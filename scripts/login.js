@@ -8,11 +8,9 @@ async function loginUser(e) {
 
     try {
         await signInWithEmailAndPassword(auth, email, password);
-        alert('Login successful! Redirecting to chat...');
         window.location.href = 'index.html';
     } catch (error) {
         console.error('Error logging in user:', error);
-        alert(`Error: ${error.message}`);
     }
 }
 
