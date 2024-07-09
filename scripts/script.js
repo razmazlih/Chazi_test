@@ -51,7 +51,7 @@ function addMessage(type, text, timestamp) {
 // XXXXXXXXXX
 function simulateBotResponse(userId) {
     setTimeout(() => {
-        const botResponse = "הודעה נשלחה";
+        const botResponse = "היי, אני חזי - העוזר האישי שלך";
         addMessage('received', botResponse);
         addMessageToFirebase(userId, 'received', botResponse);
     }, 1000); // השהייה של שנייה אחת (1000 מילישניות)
