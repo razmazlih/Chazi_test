@@ -20,7 +20,6 @@ async function addMessageToFirebase(userId, type, text) {
             text,
             timestamp: serverTimestamp()
         });
-        console.log("Message added to Firebase");
     } catch (error) {
         console.error("Error adding message to Firebase: ", error);
     }
@@ -30,7 +29,7 @@ function loadMessagesFromFirebase(userId) {
     const q = query(collection(firestore, `users/${userId}/messages`), orderBy('timestamp'));
     const chatWindow = document.querySelector('.chat-window');
     onSnapshot(q, (snapshot) => {
-        chatWindow.innerHTML = ''; // Clear chat window
+        chatWindow.innerHTML = '';
         snapshot.forEach((doc) => {
             const messageData = doc.data();
             addMessage(messageData.type, messageData.text, messageData.timestamp);
@@ -49,6 +48,18 @@ function addMessage(type, text, timestamp) {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 function addEventListeners(userId) {
     const inputBar = document.querySelector('.input-bar input');
     const sendButton = document.querySelector('.send-button');
@@ -63,7 +74,7 @@ function addEventListeners(userId) {
         }
     });
 
-    inputBar.addEventListener('keypress', (e) => {
+    inputBar.addEventListener('keypress', debounce((e) => {
         if (e.key === 'Enter') {
             const messageText = inputBar.value.trim();
             if (messageText) {
@@ -72,7 +83,7 @@ function addEventListeners(userId) {
                 inputBar.value = '';
             }
         }
-    });
+    }, 300));
 
     logoutButton.addEventListener('click', () => {
         auth.signOut().then(() => {
