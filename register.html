@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הרשמה</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="scripts/firebase.js"></script>
+    <script type="module" src="scripts/register.js"></script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>הרשמה</h2>
+        <form id="register-form">
+            <input type="text" id="name" placeholder="שם מלא" required>
+            <input type="email" id="email" placeholder="אימייל" required>
+            <input type="password" id="password" placeholder="סיסמא" required>
+            <button type="submit">הרשם</button>
+        </form>
+        <p>כבר יש לך חשבון? <a href="login.html">התחבר כאן</a></p>
+    </div>
+</body>
+</html>

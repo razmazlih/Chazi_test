@@ -1,0 +1,171 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+header {
+    background-color: #ffffff;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+header .logo img {
+    height: 40px;
+    margin: 0;
+    vertical-align: middle;
+}
+
+header .status {
+    margin-top: 10px;
+}
+
+header .status .online {
+    color: green;
+}
+
+header h1 {
+    color: #d94f0b;
+    font-size: 1.5rem;
+}
+
+.chat-window {
+    padding: 20px;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+}
+
+.message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.message img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.message-content {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 15px;
+    position: relative;
+}
+
+.message.received {
+    flex-direction: row-reverse;
+}
+
+.message.received .message-content {
+    background-color: #9c27b0;
+    color: white;
+    margin-right: 10px;
+}
+
+.message.sent {
+    flex-direction: row;
+}
+
+.message.sent .message-content {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    margin-left: 10px;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.input-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-bar input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+}
+
+.input-bar button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.mic-icon::before {
+    content: '🎤';
+    font-size: 1.2rem;
+}
+
+.send-icon::before {
+    content: '✉️';
+    font-size: 1.2rem;
+}
+
+.form-container {
+    max-width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #d94f0b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #c44405;
+}
+
+.form-container p {
+    margin-top: 10px;
+}
+.logout-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #d94f0b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background-color: #c44405;
+}
