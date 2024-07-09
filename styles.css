@@ -47,6 +47,7 @@ header h1 {
     right: 0;
     left: 0;
     bottom: 56px;
+    font-size: 13px;
 }
 
 .message {
