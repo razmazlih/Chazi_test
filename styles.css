@@ -55,12 +55,21 @@ header h1 {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
+.sent {
+    border-radius: 50px 0 50px 50px;
+}
+
+.received {
+    border-radius: 0 50px 50px 50px;
+    margin-left: 5px;
+}
+
 .message-content {
     max-width: 70%;
     padding: 10px;
-    border-radius: 15px;
     position: relative;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 0 20px 0 20px;
 }
 
 .message.received {
@@ -159,7 +168,7 @@ footer {
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 50px;
     transition: border-color 0.3s;
 }
 

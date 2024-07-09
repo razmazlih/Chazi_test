@@ -29,7 +29,7 @@ function loadMessagesFromFirebase(userId) {
     const q = query(collection(firestore, `users/${userId}/messages`), orderBy('timestamp'));
     const chatWindow = document.querySelector('.chat-window');
     onSnapshot(q, (snapshot) => {
-        chatWindow.innerHTML = '';
+        chatWindow.innerHTML = ''; // Clear chat window
         snapshot.forEach((doc) => {
             const messageData = doc.data();
             addMessage(messageData.type, messageData.text);
@@ -42,11 +42,21 @@ function addMessage(type, text, timestamp) {
     message.classList.add('message', type);
     const imgSrc = type === 'sent' ? 'images/user.png' : 'images/bot.png';
     const timeString = timestamp ? new Date(timestamp.seconds * 1000).toLocaleTimeString('he-IL') : '';
-    message.innerHTML = `<img src="${imgSrc}" alt="${type}"><div class="message-content"><p>${text}</p><span class="timestamp">${timeString}</span></div>`;
+    message.innerHTML = `<img src="${imgSrc}" alt="${type}"><div class="${type} message-content"><p>${text}</p><span class="timestamp">${timeString}</span></div>`;
     const chatWindow = document.querySelector('.chat-window');
     chatWindow.appendChild(message);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
+
+// XXXXXXXXXX
+function simulateBotResponse(userId) {
+    setTimeout(() => {
+        const botResponse = "הודעה נשלחה";
+        addMessage('received', botResponse);
+        addMessageToFirebase(userId, 'received', botResponse);
+    }, 1000); // השהייה של שנייה אחת (1000 מילישניות)
+}
+// XXXXXXXXXX
 
 function debounce(func, wait) {
     let timeout;
@@ -71,6 +81,9 @@ function addEventListeners(userId) {
             addMessage('sent', messageText);
             addMessageToFirebase(userId, 'sent', messageText);
             inputBar.value = '';
+            // XXXXXXXXXX
+            simulateBotResponse(userId); // קריאה לפונקציה שמדמה תשובה
+            // XXXXXXXXXX
         }
     });
 
@@ -81,6 +94,9 @@ function addEventListeners(userId) {
                 addMessage('sent', messageText);
                 addMessageToFirebase(userId, 'sent', messageText);
                 inputBar.value = '';
+                // XXXXXXXXXX
+                simulateBotResponse(userId); // קריאה לפונקציה שמדמה תשובה
+                // XXXXXXXXXX
             }
         }
     }, 300));
