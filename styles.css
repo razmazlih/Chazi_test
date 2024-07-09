@@ -80,6 +80,9 @@ header h1 {
     position: relative;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     padding: 0 20px 0 20px;
+    white-space: pre-wrap; /* מאפשר שבירת שורות */
+    word-wrap: break-word; /* שבירת מילים ארוכות */
+
 }
 
 .message.received {
