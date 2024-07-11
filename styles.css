@@ -234,3 +234,9 @@ footer {
 .logout-button:hover {
     background-color: #c44405;
 }
+
+.add-pic-register {
+    text-align: right;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
