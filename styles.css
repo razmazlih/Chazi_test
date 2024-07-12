@@ -240,3 +240,7 @@ footer {
     font-size: 12px;
     margin-bottom: 5px;
 }
+
+.red-alert-login {
+    color: rgb(157, 0, 0);
+}

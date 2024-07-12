@@ -10,8 +10,11 @@ async function loginUser(e) {
         await signInWithEmailAndPassword(auth, email, password);
         window.location.href = 'index.html';
     } catch (error) {
+        const messageLogin = document.getElementById('message-login');
+        messageLogin.innerHTML = "<p class='red-alert-login'> האימייל או סיסמא לא נכונים </p>"
         console.error('Error logging in user:', error);
     }
+
 }
 
 document.getElementById('login-form').addEventListener('submit', loginUser);
