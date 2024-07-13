@@ -10,10 +10,14 @@ async function loginUser(e) {
         await signInWithEmailAndPassword(auth, email, password);
         window.location.href = 'index.html';
     } catch (error) {
-        const messageLogin = document.getElementById('message-login');
-        messageLogin.innerHTML =
-            "<p class='red-alert-login'> האימייל או סיסמא לא נכונים </p>";
-        console.error('Error logging in user:', error);
+		if (document.querySelector('.red-alert-login')) {
+			return
+		}
+        const formLogin = document.getElementById('login-form');
+		const alertMessage = document.createElement("p");
+		alertMessage.innerHTML = "האימייל או סיסמא לא נכונים";
+		alertMessage.classList.add("red-alert-login");
+		formLogin.appendChild(alertMessage);
     }
 }
 

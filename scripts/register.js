@@ -24,6 +24,11 @@ async function registerUser(e) {
     const password = document.getElementById('password').value;
     const profilePic = document.getElementById('profile-pic').files[0];
 
+    if (password.length < 6) {
+        showRedMessage("הסיסמא צריכה להכיל 6 תוים לפחות");
+        return
+    }
+
     try {
         const userCredential = await createUserWithEmailAndPassword(
             auth,
@@ -47,8 +52,19 @@ async function registerUser(e) {
 
         window.location.href = 'index.html';
     } catch (error) {
-        console.error('Error registering user:', error);
+        showRedMessage("אנא בחר אימייל אחר - האימייל בשימוש");
     }
+}
+
+function showRedMessage(message) {
+    if (document.querySelector('.red-alert-login')) {
+        document.querySelector('.red-alert-login').remove();
+    }
+    const formLogin = document.getElementById('register-form');
+    const alertMessage = document.createElement("p");
+    alertMessage.innerHTML = message;
+    alertMessage.classList.add("red-alert-login");
+    formLogin.appendChild(alertMessage);
 }
 
 document
