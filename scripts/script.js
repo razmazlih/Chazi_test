@@ -1,5 +1,5 @@
 import { auth, firestore } from './firebase.js';
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 function checkAuthState() {
     auth.onAuthStateChanged(user => {
@@ -27,22 +27,32 @@ async function addMessageToFirebase(userId, type, text) {
     }
 }
 
-function loadMessagesFromFirebase(userId) {
+async function getProfilePicUrl(userId) {
+    const userDocRef = doc(firestore, 'users', userId);
+    const userDoc = await getDoc(userDocRef);
+    const userData = userDoc.data();
+    return userData.profilePicUrl;
+
+}
+
+async function loadMessagesFromFirebase(userId) {
     const q = query(collection(firestore, `users/${userId}/messages`), orderBy('timestamp'));
+    const myUrl = await getProfilePicUrl(userId);
     const chatWindow = document.querySelector('.chat-window');
+
     onSnapshot(q, (snapshot) => {
         chatWindow.innerHTML = ''; // Clear chat window
         snapshot.forEach((doc) => {
             const messageData = doc.data();
-            addMessage(messageData.type, messageData.text);
+            addMessage(messageData.type, messageData.text, myUrl);
         });
     });
 }
 
-function addMessage(type, text, timestamp) {
+function addMessage(type, text, picUrl, timestamp) {
     const message = document.createElement('div');
     message.classList.add('message', type);
-    const imgSrc = type === 'sent' ? 'images/my_image.png' : 'images/bot_image.png';
+    const imgSrc = type === 'sent' ? picUrl : 'images/bot_image.png';
     const timeString = timestamp ? new Date(timestamp.seconds * 1000).toLocaleTimeString('he-IL') : '';
     message.innerHTML = `<img src="${imgSrc}" alt="${type}"><div class="${type} message-content"><p>${text}</p><span class="timestamp">${timeString}</span></div>`;
     const chatWindow = document.querySelector('.chat-window');
