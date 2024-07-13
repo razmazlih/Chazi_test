@@ -82,7 +82,6 @@ header h1 {
     padding: 0 20px 0 20px;
     white-space: pre-wrap; /* מאפשר שבירת שורות */
     word-wrap: break-word; /* שבירת מילים ארוכות */
-
 }
 
 .message.received {

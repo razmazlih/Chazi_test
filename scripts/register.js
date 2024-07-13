@@ -1,7 +1,14 @@
 import { auth, firestore, storage } from './firebase.js';
 import { createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
-import { doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
-import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js';
+import {
+    doc,
+    setDoc,
+} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js';
 
 async function uploadProfilePic(userId, file) {
     const storageRef = ref(storage, `profilePics/${userId}`);
@@ -18,20 +25,24 @@ async function registerUser(e) {
     const profilePic = document.getElementById('profile-pic').files[0];
 
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
         const user = userCredential.user;
         let profilePicUrl = '';
 
         if (profilePic) {
             profilePicUrl = await uploadProfilePic(user.uid, profilePic);
         } else {
-            profilePicUrl = "./images/my_image.png";
+            profilePicUrl = './images/my_image.png';
         }
 
         await setDoc(doc(firestore, 'users', user.uid), {
             name,
             email,
-            profilePicUrl
+            profilePicUrl,
         });
 
         window.location.href = 'index.html';
@@ -40,4 +51,6 @@ async function registerUser(e) {
     }
 }
 
-document.getElementById('register-form').addEventListener('submit', registerUser);
+document
+    .getElementById('register-form')
+    .addEventListener('submit', registerUser);
