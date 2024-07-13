@@ -22,8 +22,10 @@ async function registerUser(e) {
         const user = userCredential.user;
         let profilePicUrl = '';
 
-        if (profilePic != '') {
+        if (profilePic) {
             profilePicUrl = await uploadProfilePic(user.uid, profilePic);
+        } else {
+            profilePicUrl = "./images/my_image.png";
         }
 
         await setDoc(doc(firestore, 'users', user.uid), {
