@@ -38,3 +38,5 @@ Desktop.ini
 # Build directories
 dist/
 build/
+
+survey_questions.txt

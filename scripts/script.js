@@ -10,19 +10,28 @@ import {
     getDoc,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
-function checkAuthState() {
-    auth.onAuthStateChanged((user) => {
-        if (user) {
-            const userId = user.uid;
-            loadMessagesFromFirebase(userId);
-            addEventListeners(userId);
-        } else {
-            window.location.href = 'login.html';
-        }
-    });
+async function getSurveyDocument(userId) {
+    const surveyDocRef = doc(firestore, `users/${userId}/survey/surveyDocument`);
+    const surveyDoc = await getDoc(surveyDocRef);
+
+    if (surveyDoc.exists()) {
+        return surveyDoc.data();
+    }
 }
 
-checkAuthState();
+function checkAuthState() {
+    return new Promise((resolve, reject) => {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                const userId = user.uid;
+                resolve(userId);
+            } else {
+                window.location.href = 'login.html';
+                reject('No user signed in');
+            }
+        });
+    });
+}
 
 async function addMessageToFirebase(userId, type, text) {
     try {
@@ -139,3 +148,29 @@ function addEventListeners(userId) {
             });
     });
 }
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const userId = await checkAuthState();
+        loadMessagesFromFirebase(userId);
+        addEventListeners(userId);
+
+        const surveyData = await getSurveyDocument(userId);
+
+        if (!surveyData) {
+            const popup = document.getElementById('popup');
+            const getToKnowButton = document.getElementById('get-to-know');
+            const maybeLaterButton = document.getElementById('maybe-later');
+
+            popup.classList.remove('hidden');
+            getToKnowButton.addEventListener('click', () => {
+                window.location.href = 'survey.html';
+            });
+            maybeLaterButton.addEventListener('click', () => {
+                popup.classList.add('hidden');
+            });
+        }
+    } catch (error) {
+        console.error('Error checking auth state or getting survey document:', error);
+    }
+});

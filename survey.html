@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="./scripts/survey.js"></script>
+</head>
+
+<body class="body">
+    <div class="form-container">
+        <h2 class="form-title">טופס סקר</h2>
+        <form id="surveyForm" class="form">
+            <!-- ביטחון תעסוקתי -->
+            <div class="form-step active" data-step="1">
+                <h3>ביטחון תעסוקתי</h3>
+                <label for="industry">באיזו תעשייה או תחום אתה עובד?</label>
+                <input type="text" id="industry" class="input-field" required><br>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+            <div class="form-step" data-step="2">
+                <label for="techThreat">האם אתה חושש מפיתוחים טכנולוגיים שעלולים לאיים על המקצוע שלך?</label>
+                <select id="techThreat" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="jobLoss">האם חווית או חששת מאובדן עבודה בשנה האחרונה?</label>
+                <select id="jobLoss" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="ubi">האם שמעת על מודל ההכנסה הבסיסית (UBI)?</label>
+                <select id="ubi" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- תעסוקה סדירה ובלתי סדירה -->
+            <div class="form-step" data-step="3">
+                <h3>תעסוקה סדירה ובלתי סדירה</h3>
+                <label for="employmentType">האם אתה עובד בצורה סדירה או בלתי סדירה?</label>
+                <select id="employmentType" class="input-field" required>
+                    <option value="סדירה">סדירה</option>
+                    <option value="בלתי סדירה">בלתי סדירה</option>
+                </select><br>
+
+                <label for="employmentContinuity">האם חווית חוסר רציפות בתעסוקה?</label>
+                <select id="employmentContinuity" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="jobPreference">האם אתה מעדיף עבודה במשרה מלאה או עבודה פרויקטלית?</label>
+                <select id="jobPreference" class="input-field" required>
+                    <option value="משרה מלאה">משרה מלאה</option>
+                    <option value="עבודה פרויקטלית">עבודה פרויקטלית</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- ביטחון כלכלי -->
+            <div class="form-step" data-step="4">
+                <h3>ביטחון כלכלי</h3>
+                <label for="salarySufficiency">האם המשכורת שלך מספיקה למחייה בכבוד ולחסוך לשעת צרה?</label>
+                <select id="salarySufficiency" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="savings">האם יש לך חסכונות או תוכניות לעתיד כלכלי בטוח?</label>
+                <select id="savings" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="expenses">האם ההוצאות העיקריות שלך גדלות מהר יותר מההכנסות?</label>
+                <select id="expenses" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- שכר -->
+            <div class="form-step" data-step="11">
+                <h3>שכר</h3>
+                <label for="salary">מהו השכר החודשי שלך?</label>
+                <input type="text" id="salary" class="input-field" required><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+                
+            </div>
+            <div class="form-step" data-step="12">
+                <label for="salarySatisfaction">האם אתה מרוצה מהשכר שלך?</label>
+                <select id="salarySatisfaction" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="paycheckUnderstanding">האם אתה מבין את תלוש השכר שלך ואת כל מרכיביו?</label>
+                <select id="paycheckUnderstanding" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- תנאים סוציאליים -->
+            <div class="form-step" data-step="14">
+                <h3>תנאים סוציאליים</h3>
+                <label for="socialBenefits">האם אתה מקבל תנאים סוציאליים מהמעסיק?</label>
+                <select id="socialBenefits" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="welfareUsage">האם נעזרת אי פעם בביטוח לאומי או במערכת הרווחה?</label>
+                <select id="welfareUsage" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא
+                </select><br>
+
+                <label for="welfareOpinion">האם אתה מרוצה ממצב הרווחה והתנאים הסוציאליים בישראל?</label>
+                <select id="welfareOpinion" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- הכרת יחסי עובד-מעביד -->
+            <div class="form-step" data-step="17">
+                <h3>הכרת יחסי עובד-מעביד</h3>
+                <label for="employmentStatus">האם אתה עובד שכיר או עצמאי?</label>
+                <select id="employmentStatus" class="input-field" required>
+                    <option value="שכיר">שכיר</option>
+                    <option value="עצמאי">עצמאי</option>
+                </select><br>
+
+                <label for="employerIssues">האם היו לך בעיות או חילוקי דעות עם המעסיק בנוגע לתנאי העבודה?</label>
+                <select id="employerIssues" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="gigEconomy">האם שמעת על כלכלת החלטורה (Gig Economy)?</label>
+                <select id="gigEconomy" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- פנסיה -->
+            <div class="form-step" data-step="20">
+                <h3>פנסיה</h3>
+                <label for="pensionPlan">האם יש לך תכנית פנסיה?</label>
+                <select id="pensionPlan" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="pensionSatisfaction">האם אתה מרוצה מתנאי הפנסיה שלך?</label>
+                <select id="pensionSatisfaction" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="pensionConcerns">האם אתה חושש מחוסר יכולת להתפרנס בגיל מבוגר?</label>
+                <select id="pensionConcerns" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- חובות וזכויות נוספות -->
+            <div class="form-step" data-step="23">
+                <h3>חובות וזכויות נוספות</h3>
+                <label for="additionalBenefits">האם המעסיק שלך מספק הטבות נוספות מעבר לשכר?</label>
+                <select id="additionalBenefits" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+ 
+                <label for="benefitSatisfaction">האם אתה מרוצה מההטבות הנוספות שמקום העבודה מציע?</label>
+                <select id="benefitSatisfaction" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="desiredBenefits">האם יש הטבות נוספות שהיית רוצה לקבל ממקום העבודה?</label>
+                <select id="desiredBenefits" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- תנאי עבודה -->
+            <div class="form-step" data-step="26">
+                <h3>תנאי עבודה</h3>
+                <label for="workHours">האם אתה עובד יותר מ-40 שעות בשבוע?</label>
+                <select id="workHours" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="workEnvironment">האם אתה מרוצה מסביבת העבודה הפיזית שלך?</label>
+                <select id="workEnvironment" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="stress">האם אתה מרגיש לחץ ועומס בעבודה?</label>
+                <select id="stress" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- תקשורת בין אישית -->
+            <div class="form-step" data-step="29">
+                <h3>תקשורת בין אישית</h3>
+                <label for="organizationalCulture">האם אתה מרוצה מהתרבות הארגונית במקום העבודה שלך?</label>
+                <select id="organizationalCulture" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="managerRelationship">האם אתה מרוצה מהיחסים עם המנהל הישיר שלך?</label>
+                <select id="managerRelationship" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="mentoring">האם אתה מקבל חניכה או מנטורינג במקום העבודה?</label>
+                <select id="mentoring" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="colleagueCommunication">האם אתה מרוצה מהתקשורת עם עמיתים לעבודה?</label>
+                <select id="colleagueCommunication" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- כללי התנהגות בקבוצות ובפורומים -->
+            <div class="form-step" data-step="33">
+                <h3>כללי התנהגות בקבוצות ובפורומים</h3>
+                <label for="respectfulTreatment">האם חווית אי פעם יחס לא מכבד או התעמרות במקום העבודה?</label>
+                <select id="respectfulTreatment" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="improvementSuggestions">האם יש לך הצעות לשיפור תרבות העבודה בארגון שלך?</label>
+                <select id="improvementSuggestions" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+
+                <label for="interpersonalImprovement">האם אתה מרגיש שיש מקום לשיפור בתקשורת הבין-אישית בעבודה?</label>
+                <select id="interpersonalImprovement" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="button" class="next-button">הבא</button>
+            </div>
+
+            <!-- סיכום -->
+            <div class="form-step" data-step="36">
+                <h3>סיכום</h3>
+                <label for="primaryChange">האם יש תחום עיקרי שבו אתה מרגיש שדרוש שינוי בעבודה שלך?</label>
+                <select id="primaryChange" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <label for="importantTopics">האם יש נושאים חשובים עבורך לשיפור בתנאי העבודה שלך?</label>
+                <select id="importantTopics" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <label for="additionalQuestions">האם יש לך שאלות נוספות או נושאים שתרצה להתייעץ לגביהם?</label>
+                <select id="additionalQuestions" class="input-field" required>
+                    <option value="כן">כן</option>
+                    <option value="לא">לא</option>
+                </select><br>
+                <button type="button" class="prev-button">הקודם</button>
+                <button type="submit" class="submit-button">שלח</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>
