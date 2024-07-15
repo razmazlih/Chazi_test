@@ -1,5 +1,5 @@
 import { auth } from './firebase.js';
-import { signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
+import { signInWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
 
 async function loginUser(e) {
     e.preventDefault();
@@ -7,17 +7,54 @@ async function loginUser(e) {
     const password = document.getElementById('password').value;
 
     try {
-        await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = 'index.html';
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        if (user.emailVerified) {
+            window.location.href = 'index.html';
+        } else {
+            showRedMessage("אימייל לא אומת. נא לאמת את האימייל שלך.", user);
+        }
     } catch (error) {
-		if (document.querySelector('.red-alert-login')) {
-			return
-		}
-        const formLogin = document.getElementById('login-form');
-		const alertMessage = document.createElement("p");
-		alertMessage.innerHTML = "האימייל או סיסמא לא נכונים";
-		alertMessage.classList.add("red-alert-login");
-		formLogin.appendChild(alertMessage);
+        showRedMessage("האימייל או סיסמא לא נכונים");
+    }
+}
+
+async function resendVerificationEmail(user) {
+    try {
+        await sendEmailVerification(user);
+        alert("נשלח אימייל אימות מחדש.");
+    } catch (error) {
+        alert("שגיאה בשליחת אימייל האימות. נא לנסות שוב מאוחר יותר.");
+    }
+}
+
+function showRedMessage(message, user) {
+    if (document.getElementById('message-login')) {
+        document.getElementById('message-login').remove();
+    }
+
+    const divLoginMessage = document.createElement("div");
+    divLoginMessage.id = 'message-login';
+
+    const formLogin = document.getElementById('login-form');
+    formLogin.appendChild(divLoginMessage);
+
+    const alertMessage = document.createElement("p");
+    alertMessage.innerHTML = message;
+    alertMessage.classList.add("red-alert-login");
+
+    divLoginMessage.appendChild(alertMessage);
+
+    if (user) {
+        const resendLink = document.createElement("a");
+        resendLink.innerHTML = "שלח שוב קישור לאימות";
+        resendLink.href = "#";
+        resendLink.onclick = function (e) {
+            e.preventDefault();
+            resendVerificationEmail(user);
+        };
+        divLoginMessage.appendChild(resendLink);
     }
 }
 

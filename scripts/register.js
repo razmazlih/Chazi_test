@@ -1,14 +1,7 @@
 import { auth, firestore, storage } from './firebase.js';
-import { createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
-import {
-    doc,
-    setDoc,
-} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
-import {
-    ref,
-    uploadBytes,
-    getDownloadURL,
-} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
+import { doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
+import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js';
 
 async function uploadProfilePic(userId, file) {
     const storageRef = ref(storage, `profilePics/${userId}`);
@@ -26,15 +19,11 @@ async function registerUser(e) {
 
     if (password.length < 6) {
         showRedMessage("הסיסמא צריכה להכיל 6 תוים לפחות");
-        return
+        return;
     }
 
     try {
-        const userCredential = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         let profilePicUrl = '';
 
@@ -49,6 +38,10 @@ async function registerUser(e) {
             email,
             profilePicUrl,
         });
+
+        // שליחת אימייל לאימות
+        await sendEmailVerification(user);
+        alert("נשלח אימייל לאימות. נא לאמת את האימייל שלך.");
 
         window.location.href = 'index.html';
     } catch (error) {
@@ -67,6 +60,4 @@ function showRedMessage(message) {
     formLogin.appendChild(alertMessage);
 }
 
-document
-    .getElementById('register-form')
-    .addEventListener('submit', registerUser);
+document.getElementById('register-form').addEventListener('submit', registerUser);
