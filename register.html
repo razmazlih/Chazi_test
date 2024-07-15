@@ -10,18 +10,21 @@
     <script type="module" src="scripts/register.js"></script>
 </head>
 
-<body>
+<body class="body">
     <div class="form-container">
-        <h2>הרשמה</h2>
-        <form id="register-form">
-            <input type="text" id="name" placeholder="שם מלא" required>
-            <input type="email" id="email" placeholder="אימייל" required>
-            <input type="password" id="password" placeholder="סיסמא" required>
+        <h2 class="form-title">הרשמה</h2>
+        <form id="register-form" class="form">
+            <input type="text" id="name" class="input-field" placeholder="שם מלא" required>
+            <input type="email" id="email" class="input-field" placeholder="אימייל" required>
+            <input type="password" id="password" class="input-field" placeholder="סיסמא" required>
             <p class="add-pic-register">*אופציונאלי* הוספת תמונת פרופיל</p>
-            <input type="file" id="profile-pic" accept="image/*">
-            <button type="submit">הרשם</button>
+            <input type="file" id="profile-pic" class="file-input" accept="image/*">
+            <button type="submit" class="submit-button">הרשם</button>
         </form>
-        <p>כבר יש לך חשבון? <a href="login.html">התחבר כאן</a></p>
+        <button id="google-register" class="google-button">
+            <img src="./images/google_icon.png" alt="Google icon"> הרשם עם גוגל
+        </button>
+        <p class="redirect-text">כבר יש לך חשבון? <a href="login.html" class="redirect-link">התחבר כאן</a></p>
     </div>
 </body>
 

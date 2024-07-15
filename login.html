@@ -10,16 +10,19 @@
     <script type="module" src="scripts/login.js"></script>
 </head>
 
-<body>
+<body class="body">
     <div class="form-container">
-        <h2>התחברות</h2>
-        <form id="login-form">
-            <input type="email" id="email" placeholder="אימייל" required>
-            <input type="password" id="password" placeholder="סיסמא" required>
-            <button type="submit">התחבר</button>
-            <div id="message-login"></div>
+        <h2 class="form-title">התחברות</h2>
+        <form id="login-form" class="form">
+            <input type="email" id="email" class="input-field" placeholder="אימייל" required>
+            <input type="password" id="password" class="input-field" placeholder="סיסמא" required>
+            <button type="submit" class="submit-button">התחבר</button>
+            <div id="message-login" class="message-container"></div>
         </form>
-        <p>אין לך חשבון? <a href="register.html">הירשם כאן</a></p>
+        <button id="google-login" class="google-button">
+            <img src="./images/google_icon.png" alt="Google icon"> התחבר עם גוגל
+        </button>
+        <p class="redirect-text">אין לך חשבון? <a href="register.html" class="redirect-link">הירשם כאן</a></p>
     </div>
 </body>
 
