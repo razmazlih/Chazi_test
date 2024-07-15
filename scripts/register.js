@@ -58,7 +58,7 @@ async function registerUser(e) {
         await sendEmailVerification(user);
         alert('נשלח אימייל לאימות. נא לאמת את האימייל שלך.');
 
-        window.location.href = 'index.html';
+        window.location.href = 'login.html';
     } catch (error) {
         showRedMessage('אנא בחר אימייל אחר - האימייל בשימוש');
     }
@@ -78,7 +78,7 @@ async function googleRegister() {
         });
 
         if (user.emailVerified) {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         } else {
             showRedMessage('אימייל לא אומת. נא לאמת את האימייל שלך.', user);
         }

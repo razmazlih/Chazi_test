@@ -1,9 +1,13 @@
-import { auth, provider } from './firebase.js';
+import { auth, provider, firestore } from './firebase.js';
 import {
     signInWithEmailAndPassword,
     signInWithPopup,
     sendEmailVerification,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
+import {
+    setDoc,
+    doc,
+} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 async function loginUser(e) {
     e.preventDefault();
@@ -33,13 +37,21 @@ async function googleLogin() {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
 
+        const profilePicUrl = user.photoURL || './images/my_image.png';
+
+        await setDoc(doc(firestore, 'users', user.uid), {
+            name: user.displayName,
+            email: user.email,
+            profilePicUrl,
+        });
+
         if (user.emailVerified) {
             window.location.href = 'index.html';
         } else {
             showRedMessage('אימייל לא אומת. נא לאמת את האימייל שלך.', user);
         }
     } catch (error) {
-        showRedMessage('שגיאה בהתחברות עם גוגל');
+        showRedMessage('שגיאה בהרשמה עם גוגל');
     }
 }
 
