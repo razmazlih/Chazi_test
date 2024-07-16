@@ -7,6 +7,7 @@ import {
 import {
     setDoc,
     doc,
+    getDoc,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 async function loginUser(e) {
@@ -23,7 +24,14 @@ async function loginUser(e) {
         const user = userCredential.user;
 
         if (user.emailVerified) {
-            window.location.href = 'index.html';
+            const userDoc = await getDoc(doc(firestore, 'users', user.uid));
+            const userData = userDoc.data();
+
+            if (userData.role === 'admin') {
+                window.location.href = 'admin_dashboard.html';
+            } else {
+                window.location.href = 'index.html';
+            }
         } else {
             showRedMessage('אימייל לא אומת. נא לאמת את האימייל שלך.', user);
         }
@@ -39,14 +47,26 @@ async function googleLogin() {
 
         const profilePicUrl = user.photoURL || './images/my_image.png';
 
-        await setDoc(doc(firestore, 'users', user.uid), {
-            name: user.displayName,
-            email: user.email,
-            profilePicUrl,
-        });
+        const userDocRef = doc(firestore, 'users', user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (!userDoc.exists()) {
+            await setDoc(userDocRef, {
+                name: user.displayName,
+                email: user.email,
+                profilePicUrl,
+                role: 'user',  // ברירת מחדל לתפקיד משתמש
+            });
+        }
+
+        const userData = userDoc.data();
 
         if (user.emailVerified) {
-            window.location.href = 'index.html';
+            if (userData.role === 'admin') {
+                window.location.href = 'admin_dashboard.html';
+            } else {
+                window.location.href = 'index.html';
+            }
         } else {
             showRedMessage('אימייל לא אומת. נא לאמת את האימייל שלך.', user);
         }

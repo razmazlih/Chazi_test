@@ -52,6 +52,7 @@ async function registerUser(e) {
             name,
             email,
             profilePicUrl,
+            role: 'user',  // הוספת שדה תפקיד
         });
 
         // שליחת אימייל לאימות
@@ -75,6 +76,7 @@ async function googleRegister() {
             name: user.displayName,
             email: user.email,
             profilePicUrl,
+            role: 'user',  // הוספת שדה תפקיד
         });
 
         if (user.emailVerified) {
