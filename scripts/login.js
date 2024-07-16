@@ -52,14 +52,13 @@ async function googleLogin() {
 
         if (!userDoc.exists()) {
             await setDoc(userDocRef, {
-                uid: user.uid, // הוספת ה-uid
+                uid: user.uid,
                 name: user.displayName,
                 email: user.email,
                 profilePicUrl,
-                role: 'משתמש', // ברירת מחדל לתפקיד משתמש
+                role: 'משתמש',
             });
 
-            // קריאה מחדש של המסמך לאחר יצירתו
             userDoc = await getDoc(userDocRef);
         }
 
