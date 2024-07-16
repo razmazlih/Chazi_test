@@ -7,6 +7,7 @@ import {
 import {
     doc,
     setDoc,
+    getDoc,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 import {
     ref,
@@ -49,10 +50,11 @@ async function registerUser(e) {
         }
 
         await setDoc(doc(firestore, 'users', user.uid), {
+            uid: user.uid, // הוספת ה-uid
             name,
             email,
             profilePicUrl,
-            role: 'user',  // הוספת שדה תפקיד
+            role: 'משתמש', // הוספת שדה תפקיד
         });
 
         // שליחת אימייל לאימות
@@ -72,12 +74,18 @@ async function googleRegister() {
 
         const profilePicUrl = user.photoURL || './images/my_image.png';
 
-        await setDoc(doc(firestore, 'users', user.uid), {
-            name: user.displayName,
-            email: user.email,
-            profilePicUrl,
-            role: 'user',  // הוספת שדה תפקיד
-        });
+        const userDocRef = doc(firestore, 'users', user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (!userDoc.exists()) {
+            await setDoc(doc(firestore, 'users', user.uid), {
+                uid: user.uid, // הוספת ה-uid
+                name: user.displayName,
+                email: user.email,
+                profilePicUrl,
+                role: 'משתמש', // הוספת שדה תפקיד
+            });
+        }
 
         if (user.emailVerified) {
             window.location.href = 'index.html';

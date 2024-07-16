@@ -27,8 +27,8 @@ async function loginUser(e) {
             const userDoc = await getDoc(doc(firestore, 'users', user.uid));
             const userData = userDoc.data();
 
-            if (userData.role === 'admin') {
-                window.location.href = 'admin_dashboard.html';
+            if (userData.role === 'מנהל') {
+                window.location.href = './admin/admin_dashboard.html';
             } else {
                 window.location.href = 'index.html';
             }
@@ -48,22 +48,26 @@ async function googleLogin() {
         const profilePicUrl = user.photoURL || './images/my_image.png';
 
         const userDocRef = doc(firestore, 'users', user.uid);
-        const userDoc = await getDoc(userDocRef);
+        let userDoc = await getDoc(userDocRef);
 
         if (!userDoc.exists()) {
             await setDoc(userDocRef, {
+                uid: user.uid, // הוספת ה-uid
                 name: user.displayName,
                 email: user.email,
                 profilePicUrl,
-                role: 'user',  // ברירת מחדל לתפקיד משתמש
+                role: 'משתמש', // ברירת מחדל לתפקיד משתמש
             });
+
+            // קריאה מחדש של המסמך לאחר יצירתו
+            userDoc = await getDoc(userDocRef);
         }
 
         const userData = userDoc.data();
 
         if (user.emailVerified) {
-            if (userData.role === 'admin') {
-                window.location.href = 'admin_dashboard.html';
+            if (userData.role === 'מנהל') {
+                window.location.href = './admin/admin_dashboard.html';
             } else {
                 window.location.href = 'index.html';
             }

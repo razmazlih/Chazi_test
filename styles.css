@@ -293,7 +293,8 @@
     opacity: 1;
 }
 
-.next-button, .prev-button {
+.next-button,
+.prev-button {
     padding: 10px 20px;
     background-color: #d94f0b;
     color: white;
@@ -304,7 +305,8 @@
     margin: 10px;
 }
 
-.next-button:hover, .prev-button:hover {
+.next-button:hover,
+.prev-button:hover {
     background-color: #c44405;
 }
 
@@ -352,4 +354,241 @@
 
 .popup .btn.dry:hover {
     background-color: #bbb;
+}
+/* עיצוב מותאם אישית ללוח הניהול */
+.admin-body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+.admin-header {
+    background-color: #007bff;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.admin-header-title {
+    margin: 0;
+}
+
+.admin-logout-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #d94f0b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-logout-button:hover {
+    background-color: #c44405;
+}
+
+.admin-main {
+    padding: 2rem;
+    padding-top: 100px; /* התאמה עבור הכותרת הקבועה */
+}
+
+.admin-section-title {
+    margin-top: 0;
+}
+
+.admin-users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.admin-users-table,
+.admin-users-table th,
+.admin-users-table td {
+    border: 1px solid #ddd;
+}
+
+.admin-users-table th,
+.admin-users-table td {
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.admin-users-table th {
+    background-color: #f4f4f4;
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.admin-action-button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-action-button:hover {
+    background-color: #0056b3;
+}
+
+.chat-body {
+    font-family: Arial, sans-serif;
+    background-color: #e6f7ff;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+.chat-header {
+    background-color: #3399ff;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.chat-header-title {
+    margin: 0;
+}
+
+.chat-back-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.chat-back-button:hover {
+    background-color: #cc0000;
+}
+
+.chat-main {
+    padding: 2rem;
+    padding-top: 100px; /* התאמה עבור הכותרת הקבועה */
+}
+
+.chat-section {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.chat-container {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.chat-message {
+    margin-bottom: 1rem;
+}
+
+.chat-message .chat-message-sender {
+    font-weight: bold;
+}
+
+.chat-message .chat-message-content {
+    margin: 0.5rem 0;
+    white-space: pre-wrap; /* מאפשר שבירת שורות */
+    word-wrap: break-word; /* שבירת מילים ארוכות */
+}
+
+.survey-body {
+    font-family: Arial, sans-serif;
+    background-color: #e6ffe6;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+.survey-header {
+    background-color: #33cc33;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.survey-header-title {
+    margin: 0;
+}
+
+.survey-back-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.survey-back-button:hover {
+    background-color: #cc0000;
+}
+
+.survey-main {
+    padding: 2rem;
+    padding-top: 100px; /* התאמה עבור הכותרת הקבועה */
+}
+
+.survey-section {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.survey-container {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.survey-question {
+    margin-bottom: 1rem;
+}
+
+.survey-question .survey-question-title {
+    font-weight: bold;
+}
+
+.survey-answer {
+    margin: 0.5rem 0;
+    white-space: pre-wrap; /* מאפשר שבירת שורות */
+    word-wrap: break-word; /* שבירת מילים ארוכות */
 }

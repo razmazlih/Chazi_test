@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לוח ניהול</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="admin-body">
+    <header class="admin-header">
+        <h1 class="admin-header-title">ברוך הבא ללוח הניהול</h1>
+        <button id="logout" class="admin-logout-button">התנתק</button>
+    </header>
+    <main class="admin-main">
+        <section class="admin-section">
+            <h2 class="admin-section-title">רשימת משתמשים</h2>
+            <table class="admin-users-table" id="users-table">
+                <thead>
+                    <tr>
+                        <th>שם</th>
+                        <th>אימייל</th>
+                        <th>תפקיד</th>
+                        <th>תמונה</th>
+                        <th>שיחה</th>
+                        <th>סקר</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- התוכן יטען דינמית -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script type="module" src="../scripts/admin_dashboard.js"></script>
+</body>
+</html>
