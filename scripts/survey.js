@@ -90,16 +90,6 @@ const saveSurveyData = async (userId, data) => {
     }
 };
 
-// Monitor auth state
-auth.onAuthStateChanged(user => {
-    if (user) {
-        console.log('User is signed in: ', user.uid);
-        console.log('User details: ', user); // הדפסת פרטי המשתמש
-        // ייתכן שהמשתמש כבר חתום כשהטופס נשלח
-    } else {
-        console.log('No user is signed in.');
-    }
-});
 
 document.addEventListener('DOMContentLoaded', function () {
     let currentStep = 0;

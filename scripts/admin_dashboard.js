@@ -1,13 +1,22 @@
 import { auth, firestore } from './firebase.js';
 import { signOut } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
-import { collection, getDoc, doc, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
+import {
+    collection,
+    getDoc,
+    doc,
+    getDocs,
+    query,
+    orderBy,
+} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 document.getElementById('logout').addEventListener('click', () => {
-    signOut(auth).then(() => {
-        window.location.href = '../login.html';
-    }).catch((error) => {
-        console.error('Error logging out:', error);
-    });
+    signOut(auth)
+        .then(() => {
+            window.location.href = '../login.html';
+        })
+        .catch((error) => {
+            console.error('Error logging out:', error);
+        });
 });
 
 async function checkAdmin() {
@@ -32,13 +41,16 @@ async function checkAdmin() {
 
 async function loadUsers() {
     const usersCollection = collection(firestore, 'users');
-    const usersSnapshot = await getDocs(usersCollection);
-    const usersList = usersSnapshot.docs.map(doc => doc.data());
+    const usersQuery = query(usersCollection, orderBy('role'));
+    const usersSnapshot = await getDocs(usersQuery);
+    const usersList = usersSnapshot.docs.map((doc) => doc.data());
 
-    const usersTableBody = document.getElementById('users-table').getElementsByTagName('tbody')[0];
+    const usersTableBody = document
+        .getElementById('users-table')
+        .getElementsByTagName('tbody')[0];
     usersTableBody.innerHTML = '';
 
-    usersList.forEach(user => {
+    usersList.forEach((user) => {
         const row = document.createElement('tr');
 
         const nameCell = document.createElement('td');
@@ -80,15 +92,14 @@ async function loadUsers() {
         };
         surveyCell.appendChild(surveyButton);
         row.appendChild(surveyCell);
-        console.log(user);
 
         usersTableBody.appendChild(row);
     });
 }
 
-auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged((user) => {
     if (user) {
-        checkAdmin().catch(error => {
+        checkAdmin().catch((error) => {
             console.error('Error checking admin status:', error);
         });
     } else {
