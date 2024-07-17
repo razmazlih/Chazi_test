@@ -4,6 +4,8 @@ import {
     getDocs,
     deleteDoc,
     doc,
+    query,
+    where,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 document.getElementById('back').addEventListener('click', () => {
@@ -29,7 +31,9 @@ async function loadQuestions() {
                           )}</p>`
                         : ''
                 }
-                <button class="delete-button" data-id="${doc.id}">מחק</button>
+                <button class="delete-button" data-id="${
+                    doc.id
+                }" data-question="${questionData.question}">מחק</button>
             `;
             questionsContainer.appendChild(questionElement);
         });
@@ -38,10 +42,12 @@ async function loadQuestions() {
         deleteButtons.forEach((button) => {
             button.addEventListener('click', async (e) => {
                 const id = e.target.getAttribute('data-id');
+                const question = e.target.getAttribute('data-question');
                 try {
                     await deleteDoc(doc(firestore, 'quests', id));
+                    await deleteAnswersForQuestion(question);
                     e.target.parentElement.remove();
-                    alert('השאלה נמחקה בהצלחה!');
+                    alert('השאלה והתשובות נמחקו בהצלחה!');
                 } catch (error) {
                     console.error('Error removing document: ', error);
                     alert('שגיאה במחיקת השאלה.');
@@ -50,6 +56,27 @@ async function loadQuestions() {
         });
     } catch (error) {
         console.error('Error loading questions: ', error);
+    }
+}
+
+async function deleteAnswersForQuestion(question) {
+    try {
+        const usersSnapshot = await getDocs(collection(firestore, 'users'));
+        usersSnapshot.forEach(async (userDoc) => {
+            const userId = userDoc.id;
+            const surveysQuery = query(
+                collection(firestore, `users/${userId}/surveys`),
+                where('quest', '==', question)
+            );
+            const surveysSnapshot = await getDocs(surveysQuery);
+            surveysSnapshot.forEach(async (surveyDoc) => {
+                await deleteDoc(
+                    doc(firestore, `users/${userId}/surveys`, surveyDoc.id)
+                );
+            });
+        });
+    } catch (error) {
+        console.error('Error deleting answers for question: ', error);
     }
 }
 
