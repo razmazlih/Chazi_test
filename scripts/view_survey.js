@@ -26,7 +26,7 @@ async function loadSurvey() {
         const querySnapshot = await getDocs(surveysCollection);
 
         if (querySnapshot.empty) {
-            surveyContainer.innerHTML = '<p>אין סקרים זמינים למשתמש זה.</p>';
+            surveyContainer.innerHTML = '<p>משתמש זה עדיין לא ענה על שאלות.</p>';
             return;
         }
 
