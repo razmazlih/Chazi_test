@@ -1,5 +1,11 @@
 import { firestore } from './firebase.js';
-import { collection, query, where, getDocs, orderBy } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
+import {
+    collection,
+    query,
+    where,
+    getDocs,
+    orderBy,
+} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 document.getElementById('back').addEventListener('click', () => {
     window.location.href = 'admin_dashboard.html';
@@ -16,7 +22,10 @@ async function loadChat() {
     }
 
     try {
-        const messagesCollection = collection(firestore, `users/${userId}/messages`);
+        const messagesCollection = collection(
+            firestore,
+            `users/${userId}/messages`
+        );
         const q = query(messagesCollection, orderBy('timestamp'));
         const querySnapshot = await getDocs(q);
 
@@ -32,16 +41,20 @@ async function loadChat() {
 
             const senderElement = document.createElement('div');
             senderElement.classList.add('chat-message-sender');
-            
+
             const contentElement = document.createElement('div');
             contentElement.classList.add('chat-message-content');
 
+            const timestamp = new Date(messageData.timestamp.seconds * 1000);
+            const formattedDate = timestamp.toLocaleDateString('he-IL');
+            const formattedTime = timestamp.toLocaleTimeString('he-IL');
+
             if (messageData.type === 'received') {
-                senderElement.textContent = "חזי: ";
+                senderElement.textContent = `חזי: (${formattedDate} ${formattedTime}) `;
                 contentElement.textContent = messageData.text;
             } else if (messageData.type === 'sent') {
-                senderElement.textContent = "נשלח: ";
-                contentElement.style.color = "red";
+                senderElement.textContent = `נשלח: (${formattedDate} ${formattedTime}) `;
+                contentElement.style.color = 'red';
                 contentElement.textContent = messageData.text;
             }
 
