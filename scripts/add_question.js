@@ -52,8 +52,7 @@ document
             }
 
             await addDoc(collection(firestore, 'quests'), docData);
-            messageElement.textContent = 'השאלה נוספה בהצלחה!';
-            messageElement.style.color = 'green';
+            alert('השאלה נוספה בהצלחה!');
         } catch (error) {
             console.error('Error adding document: ', error);
             messageElement.textContent = 'שגיאה בהוספת השאלה.';

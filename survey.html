@@ -4,23 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>צפייה בסקר</title>
-    <link rel="stylesheet" href="../styles.css">
+    <title>Survey</title>
+    <link rel="stylesheet" href="./styles.css">
 </head>
 
-<body class="survey-body">
-    <header class="survey-header">
-        <h1 class="survey-header-title">צפייה בסקר</h1>
-        <button id="back" class="survey-back-button">חזרה לדף הניהול</button>
+<body class="custom-survey-body">
+    <header class="custom-survey-header">
+        <h1 class="custom-survey-header-title">סקר</h1>
+        <button id="back" class="custom-survey-back-button">חזרה</button>
     </header>
-    <main class="survey-main">
-        <section class="survey-section">
-            <div id="survey-container" class="survey-container">
-                <!-- הסקר יטען כאן דינמית -->
-            </div>
+
+    <main class="custom-survey-main">
+        <section class="custom-survey-section">
+            <form id="surveyForm" class="custom-form-container">
+                <div id="questionsContainer"></div>
+                <button type="submit" class="custom-submit-button">שלח</button>
+                <div id="message" class="custom-message-container"></div>
+            </form>
         </section>
     </main>
-    <script type="module" src="../scripts/view_survey.js"></script>
+
+    <script type="module" src="./scripts/survey.js"></script>
 </body>
 
 </html>

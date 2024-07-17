@@ -29,8 +29,7 @@ async function doesCollectionExist(userId) {
     surveysData.sort(sortFunction);
     questsData.sort(sortFunction);
 
-    const areCollectionsEqual =
-        JSON.stringify(surveysData) === JSON.stringify(questsData);
+    const areCollectionsEqual = surveysData.length === questsData.length;
 
     if (areCollectionsEqual) {
         return true;
