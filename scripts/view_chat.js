@@ -1,11 +1,40 @@
-import { firestore } from './firebase.js';
+import { auth, firestore } from './firebase.js';
 import {
     collection,
     query,
-    where,
+    doc,
+    getDoc,
     getDocs,
     orderBy,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
+
+async function checkAdmin() {
+    const user = auth.currentUser;
+    if (!user) {
+        window.location.href = '../login.html';
+        return;
+    }
+
+    const userDoc = await getDoc(doc(firestore, 'users', user.uid));
+    if (userDoc.exists()) {
+        const userData = userDoc.data();
+        if (userData.role !== 'מנהל') {
+            window.location.href = '../index.html';
+        }
+    } else {
+        window.location.href = '../index.html';
+    }
+}
+
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        checkAdmin().catch((error) => {
+            console.error('Error checking admin status:', error);
+        });
+    } else {
+        window.location.href = '../login.html';
+    }
+});
 
 document.getElementById('back').addEventListener('click', () => {
     window.location.href = 'admin_dashboard.html';

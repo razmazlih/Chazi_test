@@ -39,6 +39,16 @@ async function checkAdmin() {
     }
 }
 
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        checkAdmin().catch((error) => {
+            console.error('Error checking admin status:', error);
+        });
+    } else {
+        window.location.href = '../login.html';
+    }
+});
+
 async function loadUsers() {
     const usersCollection = collection(firestore, 'users');
     const usersQuery = query(usersCollection, orderBy('role'));
@@ -97,12 +107,4 @@ async function loadUsers() {
     });
 }
 
-auth.onAuthStateChanged((user) => {
-    if (user) {
-        checkAdmin().catch((error) => {
-            console.error('Error checking admin status:', error);
-        });
-    } else {
-        window.location.href = '../login.html';
-    }
-});
+
