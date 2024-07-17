@@ -8,15 +8,34 @@ import {
     serverTimestamp,
     doc,
     getDoc,
+    getDocs,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
-async function getSurveyDocument(userId) {
-    const surveyDocRef = doc(firestore, `users/${userId}/survey/surveyDocument`);
-    const surveyDoc = await getDoc(surveyDocRef);
+async function doesCollectionExist(userId) {
+    const surveysCollectionRef = collection(
+        firestore,
+        `users/${userId}/surveys`
+    );
+    const questsCollectionRef = collection(firestore, 'quests');
 
-    if (surveyDoc.exists()) {
-        return surveyDoc.data();
+    const surveysSnapshot = await getDocs(surveysCollectionRef);
+    const questsSnapshot = await getDocs(questsCollectionRef);
+
+    const surveysData = surveysSnapshot.docs.map((doc) => doc.data());
+    const questsData = questsSnapshot.docs.map((doc) => doc.data());
+
+    const sortFunction = (a, b) =>
+        JSON.stringify(a).localeCompare(JSON.stringify(b));
+    surveysData.sort(sortFunction);
+    questsData.sort(sortFunction);
+
+    const areCollectionsEqual =
+        JSON.stringify(surveysData) === JSON.stringify(questsData);
+
+    if (areCollectionsEqual) {
+        return true;
     }
+    return false;
 }
 
 function checkAuthState() {
@@ -155,9 +174,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadMessagesFromFirebase(userId);
         addEventListeners(userId);
 
-        const surveyData = await getSurveyDocument(userId);
+        const isSurvey = await doesCollectionExist(userId);
 
-        if (!surveyData) {
+        if (!isSurvey) {
             const popup = document.getElementById('popup');
             const getToKnowButton = document.getElementById('get-to-know');
             const maybeLaterButton = document.getElementById('maybe-later');
@@ -171,6 +190,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
     } catch (error) {
-        console.error('Error checking auth state or getting survey document:', error);
+        console.error(
+            'Error checking auth state or getting survey document:',
+            error
+        );
     }
 });

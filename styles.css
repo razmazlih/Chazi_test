@@ -599,7 +599,7 @@
     top: 10px;
     left: 40px;
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     border: none;
     border-radius: 5px;
@@ -609,4 +609,128 @@
 
 .admin-chat-button:hover {
     background-color: #45a049;
+}
+
+.admin-add-question-link {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 10px 20px;
+    background-color: #007bff; /* צבע רקע */
+    color: white; /* צבע טקסט */
+    text-decoration: none; /* הסרת הקו התחתון */
+    border-radius: 5px; /* פינות מעוגלות */
+    transition: background-color 0.3s, transform 0.3s; /* אפקטי מעבר */
+    font-weight: bold; /* טקסט מודגש */
+}
+
+.admin-add-question-link:hover {
+    background-color: #0056b3; /* שינוי צבע רקע בעת ריחוף */
+    transform: scale(1.05); /* הגדלת הכפתור בעת ריחוף */
+}
+
+.admin-add-question-link:active {
+    transform: scale(1); /* חזרה לגודל המקורי בעת לחיצה */
+}
+
+/* עיצוב מותאם אישית לסקר */
+.custom-survey-body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+.custom-survey-header {
+    background-color: #ffffff;
+    color: #d94f0b;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.custom-survey-header-title {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.custom-survey-back-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #d94f0b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.custom-survey-back-button:hover {
+    background-color: #c44405;
+}
+
+.custom-survey-main {
+    padding: 2rem;
+    padding-top: 100px; /* התאמה עבור הכותרת הקבועה */
+}
+
+.custom-survey-section {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.custom-form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.custom-question-item {
+    margin-bottom: 20px;
+}
+
+.custom-question-item p {
+    font-weight: bold;
+    color: #333;
+}
+
+.custom-input-field {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.custom-input-field:focus {
+    border-color: #d94f0b;
+}
+
+.custom-submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #d94f0b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.custom-submit-button:hover {
+    background-color: #c44405;
+}
+
+.custom-message-container {
+    color: #d94f0b;
+    margin-top: 20px;
 }

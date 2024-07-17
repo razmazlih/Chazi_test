@@ -8,13 +8,15 @@ async function forgotPassword(e) {
     try {
         await sendPasswordResetEmail(auth, email);
         alert('קישור לאיפוס הסיסמא נשלח לאימייל שלך.');
-        window.location.href = "./login.html"
+        window.location.href = './login.html';
     } catch (error) {
         showRedMessage('שגיאה בשליחת קישור לאיפוס הסיסמא.');
     }
 }
 
-document.getElementById('forgot-password-form').addEventListener('submit', forgotPassword);
+document
+    .getElementById('forgot-password-form')
+    .addEventListener('submit', forgotPassword);
 
 function showRedMessage(message) {
     if (document.getElementById('message-login')) {
