@@ -592,3 +592,20 @@
     white-space: pre-wrap; /* מאפשר שבירת שורות */
     word-wrap: break-word; /* שבירת מילים ארוכות */
 }
+
+.admin-chat-button {
+    position: absolute;
+    top: 10px;
+    left: 40px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-chat-button:hover {
+    background-color: #45a049;
+}
