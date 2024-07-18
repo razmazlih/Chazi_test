@@ -132,7 +132,7 @@ async function sendMessage(userMessage, summary) {
     if (summary) {
         myMessages.push({ role: 'system', content: summary });
     }
-    myMessages.push({ role: 'system', content: 'אתה חזי, מומחה בתחום העבודה ועונה בצורה אנושית' });
+    myMessages.push({ role: 'system', content: 'אתה "חזי" - העוזר האישי, מומחה בתחום העבודה ועונה בצורה אנושית' });
     myMessages.push({ role: 'user', content: userMessage });
 
     const body = JSON.stringify({
