@@ -1,6 +1,10 @@
 import { auth, firestore } from './firebase.js';
-import { collection, getDocs, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
+import {
+    collection,
+    getDocs,
+    addDoc,
+    serverTimestamp,
+} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 const questionsContainer = document.getElementById('questionsContainer');
 const surveyForm = document.getElementById('surveyForm');
@@ -11,7 +15,6 @@ let currentQuestionIndex = 0;
 let questions = [];
 const questionsMap = {};
 
-// פונקציה לטעינת השאלות
 async function loadQuestions() {
     try {
         const user = auth.currentUser;
@@ -21,16 +24,19 @@ async function loadQuestions() {
         }
 
         const answeredQuestions = new Set();
-        const surveysCollectionRef = collection(firestore, `users/${user.uid}/surveys`);
+        const surveysCollectionRef = collection(
+            firestore,
+            `users/${user.uid}/surveys`
+        );
         const surveysSnapshot = await getDocs(surveysCollectionRef);
 
-        surveysSnapshot.forEach(doc => {
+        surveysSnapshot.forEach((doc) => {
             const data = doc.data();
             answeredQuestions.add(data.quest);
         });
 
         const querySnapshot = await getDocs(collection(firestore, 'quests'));
-        querySnapshot.forEach(doc => {
+        querySnapshot.forEach((doc) => {
             const questionData = doc.data();
             if (!answeredQuestions.has(questionData.question)) {
                 questionsMap[doc.id] = questionData.question;
@@ -44,7 +50,6 @@ async function loadQuestions() {
     }
 }
 
-// פונקציה להצגת השאלה הנוכחית
 function showQuestion() {
     questionsContainer.innerHTML = '';
     if (currentQuestionIndex < questions.length) {
@@ -55,12 +60,16 @@ function showQuestion() {
             <p><strong>שאלה:</strong> ${questionData.question}</p>
             ${
                 questionData.answerType === 'בחירה-מרובה'
-                    ? questionData.answer.map(choice => `
+                    ? questionData.answer
+                          .map(
+                              (choice) => `
                         <label>
                             <input type="radio" name="question-${questionData.id}" value="${choice}" required>
                             ${choice}
                         </label>
-                    `).join('')
+                    `
+                          )
+                          .join('')
                     : `<input type="text" name="question-${questionData.id}" class="input-field" required>`
             }
         `;
@@ -73,20 +82,22 @@ function showQuestion() {
     }
 }
 
-// מאזין ללחיצה על כפתור "הבא"
 nextButton.addEventListener('click', async () => {
     const formData = new FormData(surveyForm);
     const questionId = questions[currentQuestionIndex].id;
     const answer = formData.get(`question-${questionId}`);
-    
+
     if (!answer) {
         alert('אנא מלא את התשובה לשאלה הנוכחית');
         return;
     }
-    
+
     try {
         const user = auth.currentUser;
-        const surveysCollectionRef = collection(firestore, `users/${user.uid}/surveys`);
+        const surveysCollectionRef = collection(
+            firestore,
+            `users/${user.uid}/surveys`
+        );
         await addDoc(surveysCollectionRef, {
             quest: questionsMap[questionId],
             answer: answer,
@@ -100,7 +111,6 @@ nextButton.addEventListener('click', async () => {
     }
 });
 
-// מאזין לאירוע שליחה של הטופס
 surveyForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const user = auth.currentUser;
@@ -120,7 +130,10 @@ surveyForm.addEventListener('submit', async (e) => {
     });
 
     try {
-        const surveysCollectionRef = collection(firestore, `users/${user.uid}/surveys`);
+        const surveysCollectionRef = collection(
+            firestore,
+            `users/${user.uid}/surveys`
+        );
         for (const answer of answers) {
             await addDoc(surveysCollectionRef, {
                 quest: answer.myQuestion,
@@ -139,8 +152,7 @@ surveyForm.addEventListener('submit', async (e) => {
     surveyForm.reset();
 });
 
-// מאזין למצב האימות של המשתמש
-auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged((user) => {
     if (user) {
         loadQuestions();
     } else {
@@ -148,7 +160,6 @@ auth.onAuthStateChanged(user => {
     }
 });
 
-// מאזין ללחיצה על כפתור "חזרה"
 const backButton = document.getElementById('back');
 backButton.addEventListener('click', () => {
     window.location.href = 'index.html';
