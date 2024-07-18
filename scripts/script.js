@@ -1,4 +1,4 @@
-import { auth, firestore } from './firebase.js';
+import { auth, firestore, secretKey } from './firebase.js';
 import {
     collection,
     addDoc,
@@ -100,15 +100,65 @@ function addMessage(type, text, picUrl, timestamp) {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-// XXXXXXXXXX
-function simulateBotResponse(userId) {
-    setTimeout(() => {
-        const botResponse = 'היי, אני חזי - העוזר האישי שלך';
-        addMessage('received', botResponse);
-        addMessageToFirebase(userId, 'received', botResponse);
-    }, 1000); // השהייה של שנייה אחת (1000 מילישניות)
+async function getBotResponse(userId, message) {
+    let botResponse;
+
+    try {
+        const docRef = doc(firestore, `users/${userId}/summary/mySummary`);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const selfSummary = docSnap.data().content;
+            botResponse = await sendMessage(message, selfSummary);
+        } else {
+            botResponse = await sendMessage(message);
+        }
+    } catch (error) {
+        console.error('Error getting document:', error);
+    }
+
+    
+    addMessage('received', botResponse);
+    addMessageToFirebase(userId, 'received', botResponse);
 }
-// XXXXXXXXXX
+
+async function sendMessage(userMessage, summary) {
+    const apiKey = secretKey;
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `Bearer ${apiKey}`);
+
+    const myMessages = [];
+    if (summary) {
+        myMessages.push({ role: 'system', content: summary });
+    }
+    myMessages.push({ role: 'system', content: 'אתה חזי, מומחה בתחום העבודה ועונה בצורה אנושית' });
+    myMessages.push({ role: 'user', content: userMessage });
+
+    const body = JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: myMessages,
+    });
+
+    const requestOptions = {
+        method: 'POST',
+        headers: headers,
+        body: body,
+    };
+
+    try {
+        const response = await fetch(
+            'https://api.openai.com/v1/chat/completions',
+            requestOptions
+        );
+
+        const result = await response.json();
+        const botRes = result.choices[0].message.content;
+        return botRes;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 
 function debounce(func, wait) {
     let timeout;
@@ -133,9 +183,7 @@ function addEventListeners(userId) {
             addMessage('sent', messageText);
             addMessageToFirebase(userId, 'sent', messageText);
             inputBar.value = '';
-            // XXXXXXXXXX
-            simulateBotResponse(userId); // קריאה לפונקציה שמדמה תשובה
-            // XXXXXXXXXX
+            getBotResponse(userId, messageText);
         }
     });
 
@@ -148,9 +196,7 @@ function addEventListeners(userId) {
                     addMessage('sent', messageText);
                     addMessageToFirebase(userId, 'sent', messageText);
                     inputBar.value = '';
-                    // XXXXXXXXXX
-                    simulateBotResponse(userId); // קריאה לפונקציה שמדמה תשובה
-                    // XXXXXXXXXX
+                    getBotResponse(userId, messageText);
                 }
             }
         }, 300)
