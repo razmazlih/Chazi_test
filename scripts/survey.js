@@ -83,6 +83,21 @@ function showQuestion() {
 }
 
 nextButton.addEventListener('click', async () => {
+    handleNextQuestion();
+});
+
+surveyForm.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        if (currentQuestionIndex < questions.length) {
+            handleNextQuestion();
+        } else {
+            surveyForm.submit();
+        }
+    }
+});
+
+async function handleNextQuestion() {
     const formData = new FormData(surveyForm);
     const questionId = questions[currentQuestionIndex].id;
     const answer = formData.get(`question-${questionId}`);
@@ -109,7 +124,7 @@ nextButton.addEventListener('click', async () => {
         console.error('Error submitting answer: ', error);
         alert('שגיאה בשליחת התשובה. נסה שוב.');
     }
-});
+}
 
 surveyForm.addEventListener('submit', async (e) => {
     e.preventDefault();
