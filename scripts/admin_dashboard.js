@@ -106,5 +106,3 @@ async function loadUsers() {
         usersTableBody.appendChild(row);
     });
 }
-
-

@@ -27,12 +27,12 @@ const provider = new GoogleAuthProvider();
 let secretKey;
 
 fetch('test/secret_code.txt')
-  .then(response => response.text())
-  .then(data => {
-    secretKey = data.trim();
-  })
-  .catch(error => {
-    console.error('אירעה שגיאה בקריאת הקובץ:', error);
-  });
+    .then((response) => response.text())
+    .then((data) => {
+        secretKey = data.trim();
+    })
+    .catch((error) => {
+        console.error('אירעה שגיאה בקריאת הקובץ:', error);
+    });
 
 export { auth, firestore, storage, provider, secretKey };
