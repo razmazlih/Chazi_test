@@ -1,9 +1,11 @@
-import { auth, firestore } from './firebase.js';
+import { auth, firestore, secretKey } from './firebase.js';
 import {
     collection,
     getDocs,
     addDoc,
     serverTimestamp,
+    doc,
+    setDoc,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 const questionsContainer = document.getElementById('questionsContainer');
@@ -126,6 +128,59 @@ async function handleNextQuestion() {
     }
 }
 
+async function createSummaryDocument(userId) {
+    const apiUrl = 'https://api.openai.com/v1/chat/completions';
+    const apiKey = secretKey;
+
+    const surveysCollectionRef = collection(firestore, `users/${userId}/surveys`);
+    const surveysSnapshot = await getDocs(surveysCollectionRef);
+
+    const answers = [];
+    surveysSnapshot.forEach(doc => {
+        const data = doc.data();
+        answers.push({
+            myQuestion: data.quest,
+            myAnswer: data.answer,
+        });
+    });
+
+    const questionsAndAnswers = answers.map(qa => `ש: ${qa.myQuestion}\nת: ${qa.myAnswer}`).join('\n\n');
+    const documentContent = `
+סיכום עבור ${userId}
+
+שאלות ותשובות:
+${questionsAndAnswers}
+    `;
+
+    const messages = [
+        { role: 'system', content: 'אתה יוצר סיכום על סמך שאלות ותשובות שהמשתמש ענה.' },
+        { role: 'user', content: `אלו השאלות והתשובות: ${documentContent}.` },
+        { role: 'user', content: 'נא ליצור סיכום על סמך השאלות והתשובות שסופקו.' }
+    ];
+
+    const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: messages
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch summary from OpenAI API');
+    }
+
+    const data = await response.json();
+    const summary = data.choices[0].message.content.trim();
+
+    const summaryDocRef = doc(firestore, `users/${userId}/summary/mySummary`);
+    await setDoc(summaryDocRef, { content: summary, timestamp: serverTimestamp() });
+}
+
 surveyForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const user = auth.currentUser;
@@ -156,6 +211,7 @@ surveyForm.addEventListener('submit', async (e) => {
                 timestamp: serverTimestamp(),
             });
         }
+        await createSummaryDocument(user.uid);
         alert('התשובות נקלטו בהצלחה!');
         window.location.href = 'index.html';
     } catch (error) {
