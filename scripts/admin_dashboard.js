@@ -19,8 +19,7 @@ document.getElementById('logout').addEventListener('click', () => {
         });
 });
 
-async function checkAdmin() {
-    const user = auth.currentUser;
+async function checkAdmin(user) {
     if (!user) {
         window.location.href = '../login.html';
         return;
@@ -41,7 +40,7 @@ async function checkAdmin() {
 
 auth.onAuthStateChanged((user) => {
     if (user) {
-        checkAdmin().catch((error) => {
+        checkAdmin(user).catch((error) => {
             console.error('Error checking admin status:', error);
         });
     } else {
