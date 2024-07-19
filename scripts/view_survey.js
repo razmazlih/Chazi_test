@@ -49,6 +49,19 @@ async function loadSurvey() {
     }
 
     try {
+        const summaryDoc = await getDoc(
+            doc(firestore, `users/${userId}/summary/mySummary`)
+        );
+        if (summaryDoc.exists()) {
+            const summaryData = summaryDoc.data();
+            const summaryElement = document.createElement('div');
+            summaryElement.classList.add('survey-summary');
+            summaryElement.innerHTML = `<h2>סיכום:</h2><p>${summaryData.content}</p>`;
+            surveyContainer.appendChild(summaryElement);
+        } else {
+            surveyContainer.innerHTML = '<p>לא נמצא סיכום עבור משתמש זה.</p>';
+        }
+
         const surveysCollection = collection(
             firestore,
             `users/${userId}/surveys`
@@ -56,11 +69,11 @@ async function loadSurvey() {
         const querySnapshot = await getDocs(surveysCollection);
 
         if (querySnapshot.empty) {
-            surveyContainer.innerHTML =
+            surveyContainer.innerHTML +=
                 '<p>משתמש זה עדיין לא ענה על שאלות.</p>';
             return;
         }
-
+        surveyContainer.innerHTML += '<h2>שאלון:</h2>'
         querySnapshot.forEach((doc) => {
             const surveyData = doc.data();
             const surveyElement = document.createElement('div');
