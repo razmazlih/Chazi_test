@@ -128,10 +128,7 @@ async function handleNextQuestion() {
     }
 }
 
-async function createSummaryDocument(userId) {
-    const apiUrl = 'https://api.openai.com/v1/chat/completions';
-    const apiKey = secretKey;
-
+async function getSummary(userId) {
     const surveysCollectionRef = collection(firestore, `users/${userId}/surveys`);
     const surveysSnapshot = await getDocs(surveysCollectionRef);
 
@@ -144,38 +141,46 @@ async function createSummaryDocument(userId) {
         });
     });
 
-    const questionsAndAnswers = answers.map(qa => `ש: ${qa.myQuestion}\nת: ${qa.myAnswer}`).join('\n\n');
-    const documentContent = `
-סיכום עבור ${userId}
+    const functionUrl = 'https://europe-west1-chazi-b7b36.cloudfunctions.net/summarizeQA';
 
-שאלות ותשובות:
-${questionsAndAnswers}
-    `;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
 
-    const messages = [
-        { role: 'system', content: 'אתה יוצר סיכום על סמך שאלות ותשובות שהמשתמש ענה.' },
-        { role: 'user', content: `אלו השאלות והתשובות: ${documentContent}.` },
-        { role: 'user', content: 'נא ליצור סיכום על סמך השאלות והתשובות שסופקו.' }
-    ];
-
-    const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-            model: 'gpt-3.5-turbo',
-            messages: messages
-        })
+    const body = JSON.stringify({
+        userId: userId,
+        answers: answers,
     });
 
-    if (!response.ok) {
-        throw new Error('Failed to fetch summary from OpenAI API');
-    }
+    const requestOptions = {
+        method: 'POST',
+        headers: headers,
+        body: body,
+    };
 
-    const data = await response.json();
-    const summary = data.choices[0].message.content.trim();
+    try {
+        console.log('Connecting to URL:', functionUrl);
+        console.log('Headers:', headers);
+        console.log('Body:', body);
+
+        const response = await fetch(functionUrl, requestOptions);
+        console.log('Response:', response);
+
+        if (!response.ok) {
+            console.error('Server response:', response);
+            throw new Error(`Server error: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('Result:', result);
+        return result.summary;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function createSummaryDocument(userId) {
+    const summary = await getSummary(userId)
 
     const summaryDocRef = doc(firestore, `users/${userId}/summary/mySummary`);
     await setDoc(summaryDocRef, { content: summary, timestamp: serverTimestamp() });

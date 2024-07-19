@@ -122,22 +122,14 @@ async function getBotResponse(userId, message) {
 }
 
 async function sendMessage(userMessage, summary) {
-    const apiKey = secretKey;
+    const functionUrl = 'https://europe-west1-chazi-b7b36.cloudfunctions.net/sendMessage';
 
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `Bearer ${apiKey}`);
-
-    const myMessages = [];
-    if (summary) {
-        myMessages.push({ role: 'system', content: summary });
-    }
-    myMessages.push({ role: 'system', content: 'אתה "חזי" - העוזר האישי, מומחה בתחום העבודה ועונה בצורה אנושית' });
-    myMessages.push({ role: 'user', content: userMessage });
 
     const body = JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: myMessages,
+        message: userMessage,
+        summary: summary,
     });
 
     const requestOptions = {
@@ -147,16 +139,24 @@ async function sendMessage(userMessage, summary) {
     };
 
     try {
-        const response = await fetch(
-            'https://api.openai.com/v1/chat/completions',
-            requestOptions
-        );
+        console.log('Connecting to URL:', functionUrl);
+        console.log('Headers:', headers);
+        console.log('Body:', body);
+
+        const response = await fetch(functionUrl, requestOptions);
+        console.log('Response:', response);
+
+        if (!response.ok) {
+            console.error('Server response:', response);
+            throw new Error(`Server error: ${response.status}`);
+        }
 
         const result = await response.json();
-        const botRes = result.choices[0].message.content;
-        return botRes;
+        console.log('Result:', result);
+        return result.response;
     } catch (error) {
         console.error('Error:', error);
+        throw error;
     }
 }
 
