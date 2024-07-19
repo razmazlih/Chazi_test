@@ -57,25 +57,34 @@ function showQuestion() {
     if (currentQuestionIndex < questions.length) {
         const questionData = questions[currentQuestionIndex];
         const questionElement = document.createElement('div');
-        questionElement.classList.add('question-item');
+        questionElement.classList.add('custom-question-item');
         questionElement.innerHTML = `
             <p><strong>שאלה:</strong> ${questionData.question}</p>
-            ${
-                questionData.answerType === 'בחירה-מרובה'
-                    ? questionData.answer
-                          .map(
-                              (choice) => `
-                        <label>
-                            <input type="radio" name="question-${questionData.id}" value="${choice}" required>
-                            ${choice}
-                        </label>
-                    `
-                          )
-                          .join('')
-                    : `<input type="text" name="question-${questionData.id}" class="input-field" required>`
-            }
+            <div class="custom-radio-group">
+                ${
+                    questionData.answerType === 'בחירה-מרובה'
+                        ? questionData.answer
+                              .map(
+                                  (choice) => `
+                            <label class="custom-radio-label">
+                                <input type="radio" name="question-${questionData.id}" value="${choice}" required>
+                                <span class="custom-radio-button"></span>
+                                ${choice}
+                            </label>
+                        `
+                              )
+                              .join('')
+                        : `<input type="text" name="question-${questionData.id}" class="custom-input-field" required>`
+                }
+            </div>
         `;
         questionsContainer.appendChild(questionElement);
+
+        // Add animation class after a short delay to trigger the transition
+        setTimeout(() => {
+            questionElement.classList.add('show');
+        }, 10);
+
         nextButton.style.display = 'block';
         submitButton.style.display = 'none';
     } else {
@@ -120,8 +129,15 @@ async function handleNextQuestion() {
             answer: answer,
             timestamp: serverTimestamp(),
         });
-        currentQuestionIndex++;
-        showQuestion();
+
+        // Remove the current question with animation
+        const currentQuestionElement = questionsContainer.querySelector('.custom-question-item');
+        currentQuestionElement.classList.remove('show');
+        setTimeout(() => {
+            currentQuestionIndex++;
+            showQuestion();
+        }, 500); // Match the transition duration
+
     } catch (error) {
         console.error('Error submitting answer: ', error);
         alert('שגיאה בשליחת התשובה. נסה שוב.');
@@ -158,20 +174,12 @@ async function getSummary(userId) {
     };
 
     try {
-        console.log('Connecting to URL:', functionUrl);
-        console.log('Headers:', headers);
-        console.log('Body:', body);
-
         const response = await fetch(functionUrl, requestOptions);
-        console.log('Response:', response);
-
         if (!response.ok) {
             console.error('Server response:', response);
             throw new Error(`Server error: ${response.status}`);
         }
-
         const result = await response.json();
-        console.log('Result:', result);
         return result.summary;
     } catch (error) {
         console.error('Error:', error);

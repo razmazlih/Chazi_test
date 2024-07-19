@@ -149,11 +149,6 @@
     transform: scale(1.2);
 }
 
-.mic-icon::before {
-    content: '🎤';
-    font-size: 1.2rem;
-}
-
 .send-icon::before {
     content: '✉️';
     font-size: 1.2rem;
