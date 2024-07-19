@@ -136,12 +136,7 @@ async function sendMessage(userMessage, summary) {
     };
 
     try {
-        console.log('Connecting to URL:', functionUrl);
-        console.log('Headers:', headers);
-        console.log('Body:', body);
-
         const response = await fetch(functionUrl, requestOptions);
-        console.log('Response:', response);
 
         if (!response.ok) {
             console.error('Server response:', response);
@@ -149,7 +144,6 @@ async function sendMessage(userMessage, summary) {
         }
 
         const result = await response.json();
-        console.log('Result:', result);
         return result.response;
     } catch (error) {
         console.error('Error:', error);

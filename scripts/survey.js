@@ -202,6 +202,11 @@ surveyForm.addEventListener('submit', async (e) => {
         return;
     }
 
+    const loader = document.createElement('div');
+    loader.classList.add('custom-loader');
+    submitButton.appendChild(loader);
+    submitButton.disabled = true;
+
     const answers = [];
     const formData = new FormData(surveyForm);
     formData.forEach((value, key) => {
@@ -231,6 +236,8 @@ surveyForm.addEventListener('submit', async (e) => {
         console.error('Error submitting answers: ', error);
         messageElement.textContent = 'שגיאה בשליחת התשובות.';
         messageElement.style.color = 'red';
+    } finally {
+        submitButton.removeChild(loader);
     }
 
     surveyForm.reset();
