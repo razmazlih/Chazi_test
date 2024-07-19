@@ -31,10 +31,7 @@ async function doesCollectionExist(userId) {
 
     const areCollectionsEqual = surveysData.length === questsData.length;
 
-    if (areCollectionsEqual) {
-        return true;
-    }
-    return false;
+    return areCollectionsEqual;
 }
 
 function checkAuthState() {
@@ -116,13 +113,13 @@ async function getBotResponse(userId, message) {
         console.error('Error getting document:', error);
     }
 
-    
     addMessage('received', botResponse);
     addMessageToFirebase(userId, 'received', botResponse);
 }
 
 async function sendMessage(userMessage, summary) {
-    const functionUrl = 'https://europe-west1-chazi-b7b36.cloudfunctions.net/sendMessage';
+    const functionUrl =
+        'https://europe-west1-chazi-b7b36.cloudfunctions.net/sendMessage';
 
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -222,17 +219,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         const isSurvey = await doesCollectionExist(userId);
 
         if (!isSurvey) {
-            const popup = document.getElementById('popup');
-            const getToKnowButton = document.getElementById('get-to-know');
-            const maybeLaterButton = document.getElementById('maybe-later');
-
-            popup.classList.remove('hidden');
-            getToKnowButton.addEventListener('click', () => {
-                window.location.href = 'survey.html';
-            });
-            maybeLaterButton.addEventListener('click', () => {
-                popup.classList.add('hidden');
-            });
+            setTimeout(() => {
+                const popup = document.getElementById('popup');
+                const getToKnowButton = document.getElementById('get-to-know');
+                const maybeLaterButton = document.getElementById('maybe-later');
+        
+                popup.classList.remove('hidden');
+                popup.classList.add('show');
+        
+                getToKnowButton.addEventListener('click', () => {
+                    window.location.href = 'survey.html';
+                });
+        
+                maybeLaterButton.addEventListener('click', () => {
+                    popup.classList.remove('show');
+                    popup.classList.add('hide');
+                    setTimeout(() => {
+                        popup.classList.add('hidden');
+                        popup.classList.remove('hide');
+                    }, 300);
+                });
+            }, 3000);
         }
     } catch (error) {
         console.error(
