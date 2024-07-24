@@ -5,42 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>דף צ'אט</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/index.css">
     <script type="module" src="scripts/script.js"></script>
 </head>
 
-<body class="body">
-    <header class="header">
-        <div class="logo">
-            <img src="images/image.png" alt="logo">
+<body>
+    <header>
+        <div class="right-header">
+            <img class="model" src="./images/27on3.png" alt="">
         </div>
-        <h1 class="header-title">העוזר האישי שלי לעולם העבודה</h1>
-        <hr>
-        <div class="status">
-            <span class="online">חזי הבוט מחובר :)</span>
+
+        <div class="center-header">
+                <img class="title" src="./images/title.png" alt="">
+                <img class="online" src="./images/Online.png" alt="">
         </div>
-        <button id="logout-button" class="logout-button">התנתק</button>
+
+        <div class="left-header">
+            <img class="beta" src="images/beta.png" alt="">
+            <img class="logo" src="./images/logo.png" alt="">
+        </div>
+
+
     </header>
-    <main class="main-content">
-        <div class="chat-window"></div>
-        <div id="popup" class="popup hidden">
-            <div class="popup-header">
-                <h2>בוא נכיר</h2>
+    <main>
+        <div class="main-content">
+            <div class="chat-window"></div>
+            <div id="popup" class="popup hidden">
+                <div class="popup-header">
+                    <h2>בוא נכיר</h2>
+                </div>
+                <div class="popup-content">
+                    <p>אנחנו רוצים להכיר אותך יותר טוב. האם אתה מוכן להתחיל?</p>
+                    <button id="get-to-know" class="btn">בוא נכיר</button>
+                    <button id="maybe-later" class="btn dry">אולי אחר כך</button>
+                </div>
             </div>
-            <div class="popup-content">
-                <p>אנחנו רוצים להכיר אותך יותר טוב. האם אתה מוכן להתחיל?</p>
-                <button id="get-to-know" class="btn">בוא נכיר</button>
-                <button id="maybe-later" class="btn dry">אולי אחר כך</button>
+            <div class="footer">
+                <div class="input-bar">
+                    <input type="text" class="input-message" placeholder="הקלד הודעה...">
+                    <button class="mic-button"><img src="./images/mic.png" alt="Mic"></button>
+                    <button class="send-button"><img src="./images/send.png" alt="Send"></button>
+                </div>
+                <div class="footer-nav">
+                    <a href="https://www.working.vision/" class="nav-item">
+                        <i class="icon book-icon"></i>
+                    </a>
+                    <a href="https://www.working.vision/" class="nav-item">
+                        <i class="icon trophy-icon"></i>
+                    </a>
+                    <a href="https://www.figma.com/proto/QGIgAzaM8lojbnKzyADii3/Working-Social?page-id=889%3A3776&node-id=889-7265&viewport=172%2C1809%2C0.13&t=rV4xFrMnkMnOyF3t-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=889%3A7265" class="nav-item active">
+                        <i class="icon home-icon"></i>
+                    </a>
+                    <a href="https://www.working.vision/" class="nav-item">
+                        <i class="icon certificate-icon"></i>
+                    </a>
+                    <a href="https://www.working.vision/" class="nav-item">
+                        <i class="icon search-icon"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </main>
-    <footer class="footer">
-        <div class="input-bar">
-            <input type="text" class="input-message" placeholder="הקלד הודעה...">
-            <button class="send-button"><i class="send-icon"></i></button>
-            <button class="mic-button"><i class="mic-icon"></i></button>
-        </div>
-    </footer>
+
 </body>
 
 </html>

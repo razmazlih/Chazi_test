@@ -166,7 +166,6 @@ function debounce(func, wait) {
 function addEventListeners(userId) {
     const inputBar = document.querySelector('.input-bar input');
     const sendButton = document.querySelector('.send-button');
-    const logoutButton = document.getElementById('logout-button');
 
     sendButton.addEventListener('click', () => {
         const messageText = inputBar.value.trim();
@@ -192,16 +191,6 @@ function addEventListeners(userId) {
             }
         }, 300)
     );
-
-    logoutButton.addEventListener('click', () => {
-        auth.signOut()
-            .then(() => {
-                window.location.href = 'login.html';
-            })
-            .catch((error) => {
-                console.error('Error signing out:', error);
-            });
-    });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -241,4 +230,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             error
         );
     }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const popup = document.getElementById('popup');
+        popup.classList.remove('hidden');
+        popup.classList.add('show');
+    }, 3000);
 });

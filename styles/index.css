@@ -1,53 +1,100 @@
-/* הגדרות כלליות */
-.body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+* {
     margin: 0;
-    padding: 0;
+    font-family: 'Noto Sans Hebrew', sans-serif;
+    font-weight: 300;
+    font-style: normal;
     direction: rtl;
+    font-size: 15px;
 }
 
-.header {
-    background-color: #ffffff;
-    padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-    position: fixed;
-    width: 100%;
-    height: 133px;
-    top: 0;
-    z-index: 1000;
+body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 120px 1fr;
+    grid-template-areas:
+        'header'
+        'main'
+        'footer';
 }
 
-.header .logo img {
-    height: 40px;
-    margin: 0;
-    vertical-align: middle;
+header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 30px;
+    position: relative;
+    top: 10px;
 }
 
-.header .status {
-    margin-top: 10px;
+header::after {
+    content: '';
+    position: absolute;
+    left: 30px;
+    right: 30px;
+    bottom: 25px;
+    height: 2px;
+    background-color: rgb(255, 113, 25);
+    border-radius: 5px;
 }
 
-.header .status .online {
-    color: rgb(1, 195, 1);
+.logo {
+    height: 56%;
+    max-height: 30px;
+    margin-right: 30px;
 }
 
-.header-title {
-    color: #d94f0b;
-    font-size: 1.5rem;
+.beta {
+    height: 32%;
+    max-height: 17px;
+    position: relative;
+    bottom: 5px;
+}
+
+.online {
+    position: relative;
+    bottom: 5px;
+    margin-right: 15px;
+}
+
+.title {
+    height: 58%;
+}
+
+.model {
+    height: 70%;
+    max-height: 65px;
+}
+
+main {
+    grid-area: main;
+    padding-top: 3px;
+    background-image: url('../images/background.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+}
+
+.main-content {
+    grid-area: small-main;
+    background-color: white;
+    max-width: 550px;
+    background-color: #dcdcdc;
+}
+
+footer {
+    grid-area: footer;
 }
 
 .chat-window {
-    padding: 0 10px;
-    max-height: calc(100vh - 210px);
+    padding: 10px;
+    padding-bottom: 100px; /* Adjusted padding-bottom for desktop screens */
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 300px);
+    width: 520px;
     overflow-y: auto;
-    position: fixed;
-    top: 155px;
-    right: 0;
-    left: 0;
-    bottom: 56px;
-    font-size: 13px;
 }
 
 .message {
@@ -58,29 +105,36 @@
 }
 
 .message img {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    margin: 0 10px;
+    margin: 0 5px;
 }
 
 .sent {
-    border-radius: 50px 0 50px 50px;
+    border-radius: 30px 0 30px 30px;
 }
 
 .received {
-    border-radius: 0 50px 50px 50px;
-    margin-left: 5px;
+    border-radius: 0 30px 30px 30px;
+    margin-left: 15px;
 }
 
 .message-content {
     max-width: 70%;
-    padding: 0 15px;
+    padding: 15px 25px;
     position: relative;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+
+.message.sent {
+    flex-direction: row;
+}
+
+.message.sent .message-content {
+    background-color: #ffffff;
+    margin-right: 0px;
 }
 
 .message.received {
@@ -90,153 +144,259 @@
 .message.received .message-content {
     background-color: #9c27b0;
     color: white;
-    margin-right: 10px;
-}
-
-.message.sent {
-    flex-direction: row;
-}
-
-.message.sent .message-content {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    margin-left: 10px;
-}
-
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #ffffff;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-    display: flex;
-    justify-content: center;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    margin-left: 0px;
 }
 
 .input-bar {
     display: flex;
     align-items: center;
-    gap: 10px;
-    width: 100%;
-    max-width: 90%;
-}
-
-.input-bar input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
+    background-color: #f1f1f1;
     border-radius: 25px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s;
-}
-
-.input-bar input:focus {
-    border-color: #d94f0b;
-}
-
-.input-bar button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-    transition: transform 0.3s;
-}
-
-.input-bar button:hover {
-    transform: scale(1.2);
-}
-
-.send-icon::before {
-    content: '✉️';
-    font-size: 1.2rem;
-}
-
-.logout-button {
-    position: absolute;
-    top: 10px;
+    padding: 10px;
+    width: 500px;
+    position: relative;
+    bottom: 75px;
     right: 10px;
-    padding: 10px 20px;
-    background-color: #d94f0b;
-    color: white;
+}
+
+.input-message {
+    flex-grow: 1;
     border: none;
-    border-radius: 5px;
+    outline: none;
+    background: none;
+    padding: 10px;
+    margin: 0 10px;
+    color: black;
+}
+
+.send-button, .mic-button {
+    background: none;
+    border: none;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-.logout-button:hover {
-    background-color: #c44405;
+.send-button img, .mic-button img {
+    width: 30px;
+    height: 30px;
 }
 
-/* CSS עבור הפופאפ המעודכן והנפשה */
+.mic-button {
+    margin-left: 5px;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px 0;
+    border-top: 2px solid #f1f1f1;
+    position: fixed;
+    width: 540px;
+    height: 40px;
+    bottom: 0;
+}
+
+.nav-item {
+    color: #FF5733;
+    text-decoration: none;
+    font-size: 24px;
+    position: relative;
+}
+
+.nav-item.active {
+    background: linear-gradient(to right, #ffaf00, #ff5757, #ff00ff);
+    border-radius: 50%;
+    padding: 15px;
+}
+
+.icon {
+    font-family: FontAwesome;
+}
+
+.book-icon::before {
+    content: '\f02d'; /* Example icon, replace with actual icon code */
+}
+
+.trophy-icon::before {
+    content: '\f091'; /* Example icon, replace with actual icon code */
+}
+
+.home-icon::before {
+    content: '\f015'; /* Example icon, replace with actual icon code */
+}
+
+.certificate-icon::before {
+    content: '\f0a3'; /* Example icon, replace with actual icon code */
+}
+
+.search-icon::before {
+    content: '\f002'; /* Example icon, replace with actual icon code */
+}
+
+.footer-nav .active .icon {
+    color: #fff;
+    font-size: 30px;
+}
+
 
 .popup {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1001;
-    text-align: center;
+    width: 80%;
     max-width: 400px;
-    width: 90%;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 1.5s ease-in-out, transform 1.0s ease-in-out;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none; /* Initially hidden */
 }
 
 .popup.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, -50%) scale(1);
+    display: block;
 }
 
 .popup.hide {
-    opacity: 0;
-    visibility: hidden;
-    transform: translate(-50%, -50%) scale(0.9);
+    display: none;
 }
 
 .popup-header {
-    margin-bottom: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
 }
 
-.popup-header h2 {
-    margin: 0;
-    color: #d94f0b;
+.popup-content {
+    padding: 15px;
+    text-align: center;
 }
 
 .popup-content p {
     margin-bottom: 20px;
 }
 
-.popup .btn {
-    padding: 10px 20px;
-    margin: 10px;
-    background-color: #d94f0b;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.popup-content .btn {
+    margin: 5px;
 }
 
-.popup .btn:hover {
-    background-color: #c44405;
-}
 
-.popup .btn.dry {
-    background-color: #ddd;
-    color: #555;
-}
+/* @media (min-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            'header'
+            'small-main';
+    }
+} */
 
-.popup .btn.dry:hover {
-    background-color: #bbb;
+@media (max-width: 767px) {
+    body {
+        grid-template-rows: 120px 1fr;
+        width: 97vw;
+        background-color: #dcdcdc;
+    }
+
+    main {
+        background-image: none;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        margin-top: 70px;
+    }
+
+    .main-content {
+        max-width: 100%;
+        width: 100%;
+        padding: 0;
+    }
+
+    header {
+        display: block;
+        padding: 10px;
+        text-align: center;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        right: 30px;
+        top: 175px;
+        height: 2px;
+        background-color: rgb(255, 113, 25);
+        border-radius: 5px;
+    }
+
+    .logo,
+    .beta,
+    .online,
+    .title,
+    .model {
+        display: inline-block;
+        margin: 5px 0;
+    }
+
+    .center-header,
+    .right-header {
+        display: block;
+    }
+
+    .center-header {
+        position: relative;
+        right: 20px;
+        text-align: center;
+        width: 95%;
+    }
+
+    .left-header {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        gap: 300px;
+        position: absolute;
+        bottom: 40px;
+        align-items: center;
+    }
+
+    header::after {
+        display: none;
+    }
+
+    .chat-window {
+        width: 100%;
+        height: calc(100vh - 360px);
+        padding-bottom: 100px;
+    }
+
+    .input-bar {
+        width: calc(100% - 20px); /* Full width minus some margin */
+        bottom: 65px;
+        right: 10px;
+        padding: 5px;
+        box-shadow: 0 0 20px rgb(180, 180, 180);
+    }
+
+    .send-icon::before, .mic-icon::before {
+        font-size: 20px;
+    }
+
+    .footer-nav {
+        width: 100%;
+        padding: 10px 0;
+        bottom: 0;
+    }
+
+    .nav-item {
+        font-size: 20px;
+    }
+
+    .nav-item.active {
+        padding: 10px;
+    }
+
+    .footer-nav .active .icon {
+        font-size: 24px;
+    }
 }
