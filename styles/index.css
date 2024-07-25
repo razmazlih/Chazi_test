@@ -363,7 +363,7 @@ footer {
 
     .chat-window {
         width: 100%;
-        height: calc(100vh - 400px);
+        height: calc(100vh - 360px);
         padding-bottom: 100px;
     }
 
