@@ -80,7 +80,7 @@ main {
     grid-area: small-main;
     background-color: white;
     max-width: 550px;
-    background-color: #dcdcdc;
+    background-color: #f0f2f5;
 }
 
 footer {
@@ -286,7 +286,7 @@ footer {
     body {
         grid-template-rows: 120px 1fr;
         width: 97vw;
-        background-color: #dcdcdc;
+        background-color: #f0f2f5;
     }
 
     main {
