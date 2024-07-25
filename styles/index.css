@@ -4,7 +4,7 @@
     font-weight: 300;
     font-style: normal;
     direction: rtl;
-    font-size: 15px;
+    font-size: 12px;
 }
 
 body {
@@ -363,7 +363,7 @@ footer {
 
     .chat-window {
         width: 100%;
-        height: calc(100vh - 360px);
+        height: calc(100vh - 400px);
         padding-bottom: 100px;
     }
 
