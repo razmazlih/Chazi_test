@@ -322,6 +322,7 @@ main {
 
     header {
         display: block;
+        width: 94%;
         padding: 10px;
         text-align: center;
     }
@@ -363,7 +364,6 @@ main {
         justify-content: center;
         align-items: center;
         position: relative;
-        right: 20px;
         width: 95%;
     }
 
