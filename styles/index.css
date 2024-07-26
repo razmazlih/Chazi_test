@@ -388,6 +388,7 @@ main {
     }
 
     .footer-nav {
+        position: fixed;
         width: 100%;
         padding: 10px 0;
         bottom: 0;
