@@ -9,8 +9,6 @@
 
 body {
     display: grid;
-    overflow-y: hidden;
-    overflow-x: hidden;
     grid-template-columns: 1fr;
     grid-template-rows: 120px 1fr;
     grid-template-areas:
@@ -302,15 +300,13 @@ main {
 
 @media (max-width: 767px) {
     body {
-        grid-template-rows: 185px 1fr;
+        grid-template-rows: 185px calc(100vh - 235px);
         width: 100vw;
         background-color: #f0f2f5;
-        /* overflow-x: hidden; */
     }
 
     main {
         background-image: none;
-        /* margin-top: 70px; */
     }
 
     .main-content {
