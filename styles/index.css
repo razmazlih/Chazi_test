@@ -300,7 +300,7 @@ main {
 
 @media (max-width: 767px) {
     body {
-        grid-template-rows: 185px 1fr 50px;
+        grid-template-rows: 185px 1fr;
         width: 100vw;
         background-color: #f0f2f5;
         /* overflow-x: hidden; */
@@ -327,13 +327,14 @@ main {
 
     header::before {
         content: '';
-        position: fixed;
+        position: relative;
         left: 0;
         right: 0;
-        top: 186px;
+        top: 165px;
         height: 2px;
         background-color: rgb(255, 113, 25);
         border-radius: 5px;
+        display: block; /* או inline-block */
     }
 
     .logo,
@@ -382,7 +383,7 @@ main {
     .chat-window {
         width: 100%;
         height: calc(100vh - 330px);
-        padding: 0 0 90px 0;
+        padding: 0 0 140px 0;
     }
 
     .input-bar {
