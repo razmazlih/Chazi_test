@@ -7,10 +7,6 @@
     font-size: 18px;
 }
 
-html {
-    height: calc(100vh - 50px);
-}
-
 body {
     display: grid;
     grid-template-columns: 1fr;
@@ -304,6 +300,10 @@ main {
 }
 
 @media (max-width: 767px) {
+    html {
+        height: calc(100vh - 50px);
+    }
+
     body {
         grid-template-rows: 185px calc(100vh - 235px);
         width: 100vw;
