@@ -20,6 +20,7 @@ body {
 header {
     grid-area: header;
     display: flex;
+    overflow-x: hidden;
     justify-content: space-between;
     align-items: end;
     padding: 30px;
@@ -381,7 +382,7 @@ main {
     .chat-window {
         width: 100%;
         height: calc(100vh - 330px);
-        padding: 0 0 140px 0;
+        padding: 0 0 90px 0;
     }
 
     .input-bar {
