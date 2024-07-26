@@ -380,7 +380,7 @@ main {
 
     .input-bar {
         width: calc(100% - 30px); /* Full width minus some margin */
-        bottom: 85px;
+        bottom: 105px;
         right: 10px;
         padding: 5px;
         box-shadow: 0 0 20px rgb(180, 180, 180);
@@ -391,9 +391,15 @@ main {
         font-size: 20px;
     }
 
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
 
     .footer-nav {
-        width: 100%;
+        width: 100vw;
         height: 50px;
         padding: 10px 0;
         bottom: 0;
