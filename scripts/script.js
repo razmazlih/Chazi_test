@@ -227,11 +227,3 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
     }
 });
-
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        const popup = document.getElementById('popup');
-        popup.classList.remove('hidden');
-        popup.classList.add('show');
-    }, 3000);
-});
