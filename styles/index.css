@@ -319,7 +319,7 @@ main {
 
     header {
         display: block;
-        width: 94%;
+        width: 96%;
         height: 165px;
         padding: 10px;
         text-align: -webkit-center;
@@ -327,10 +327,10 @@ main {
 
     header::before {
         content: '';
-        position: absolute;
+        position: fixed;
         left: 0;
         right: 0;
-        top: 175px;
+        top: 186px;
         height: 2px;
         background-color: rgb(255, 113, 25);
         border-radius: 5px;
