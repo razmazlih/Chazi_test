@@ -8,6 +8,7 @@
 }
 
 body {
+    overflow-x: hidden;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 120px 1fr;
@@ -294,7 +295,7 @@ main {
         grid-template-rows: 120px 1fr;
         width: 100vw;
         background-color: #f0f2f5;
-        overflow-x: hidden;
+        /* overflow-x: hidden; */
     }
 
     main {
@@ -373,7 +374,7 @@ main {
     }
 
     .chat-window {
-        width: 100%;
+        width: calc(100% - 20px);
         height: calc(100vh - 420px);
         padding-bottom: 110px;
     }
