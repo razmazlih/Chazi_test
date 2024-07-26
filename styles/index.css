@@ -7,6 +7,10 @@
     font-size: 18px;
 }
 
+html {
+    height: calc(100vh - 50px);
+}
+
 body {
     display: grid;
     grid-template-columns: 1fr;
