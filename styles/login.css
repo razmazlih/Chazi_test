@@ -1,10 +1,15 @@
 /* הגדרות כלליות */
-.body {
+* {
+    margin: 0;
     font-family: 'Noto Sans Hebrew', sans-serif;
+    direction: rtl;
+    font-size: 18px;
+}
+
+body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    direction: rtl;
 }
 
 .form-container {
@@ -20,11 +25,7 @@
 
 .form-title {
     margin-bottom: 20px;
-    color: #d94f0b;
-}
-
-.form {
-    width: 100%;
+    color: #F45C47;
 }
 
 .input-field {
@@ -37,13 +38,13 @@
 }
 
 .input-field:focus {
-    border-color: #d94f0b;
+    border-color: #F45C47;
 }
 
 .submit-button {
     width: 100%;
     padding: 10px;
-    background-color: #d94f0b;
+    background-color: #F45C47;
     color: white;
     border: none;
     border-radius: 5px;
@@ -55,16 +56,8 @@
     background-color: #c44405;
 }
 
-.message-container {
-    color: #d94f0b;
-}
-
-.redirect-text {
-    margin-top: 10px;
-}
-
 .redirect-link {
-    color: #d94f0b;
+    color: #F45C47;
     text-decoration: none;
 }
 
@@ -72,8 +65,8 @@
     text-decoration: underline;
 }
 
-.red-alert-login {
-    color: rgb(157, 0, 0);
+.message-container {
+    color: #F45C47;
 }
 
 .google-button {

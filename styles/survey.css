@@ -1,15 +1,20 @@
-/* עיצוב מותאם אישית לסקר */
-.custom-survey-body {
+/* הגדרות כלליות */
+* {
+    margin: 0;
     font-family: 'Noto Sans Hebrew', sans-serif;
-    background-color: #f0f2f5;
+    direction: rtl;
+    font-size: 18px;
+}
+
+body {
+    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    direction: rtl;
 }
 
 .custom-survey-header {
     background-color: #ffffff;
-    color: #d94f0b;
+    color: #f45c47;
     padding: 15px;
     text-align: center;
     border-bottom: 1px solid #ddd;
@@ -29,7 +34,7 @@
     top: 15px;
     right: 15px;
     padding: 10px 20px;
-    background-color: #d94f0b;
+    background-color: #f45c47;
     color: white;
     border: none;
     border-radius: 50px;
@@ -43,7 +48,7 @@
 
 .custom-survey-main {
     padding: 2rem;
-    padding-top: 120px; /* התאמה עבור הכותרת הקבועה */
+    padding-top: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -104,7 +109,7 @@
 }
 
 .custom-radio-label:hover {
-    color: #d94f0b;
+    color: #f45c47;
 }
 
 .custom-radio-label input {
@@ -112,24 +117,24 @@
 }
 
 .custom-radio-button {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #d94f0b;
+    min-width: 20px;
+    min-height: 20px;
+    border: 2px solid #f45c47;
     border-radius: 50%;
     margin-left: 10px;
     transition: background-color 0.3s, border-color 0.3s;
 }
 
 .custom-radio-label input:checked + .custom-radio-button {
-    background-color: #d94f0b;
-    border-color: #d94f0b;
+    background-color: #f45c47;
+    border-color: #f45c47;
 }
 
 .custom-next-button,
 .custom-submit-button {
     width: 100%;
     padding: 15px;
-    background-color: #d94f0b;
+    background-color: #f45c47;
     color: white;
     border: none;
     border-radius: 50px;
@@ -145,7 +150,7 @@
 }
 
 .custom-message-container {
-    color: #d94f0b;
+    color: #f45c47;
     margin-top: 20px;
     text-align: center;
     font-size: 1.1rem;
@@ -165,14 +170,14 @@
 }
 
 .custom-input-field:focus {
-    border-color: #d94f0b;
-    box-shadow: 0 0 10px rgba(217, 79, 11, 0.2);
+    border-color: #f45c47;
+    box-shadow: 0 0 10px rgba(244, 92, 71, 0.2);
 }
 
 .custom-loader {
     border: 4px solid #f3f3f3;
     border-radius: 50%;
-    border-top: 4px solid #d94f0b;
+    border-top: 4px solid #f45c47;
     width: 20px;
     height: 20px;
     -webkit-animation: spin 2s linear infinite;
@@ -183,11 +188,19 @@
 }
 
 @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
