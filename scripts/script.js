@@ -217,10 +217,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 maybeLaterButton.addEventListener('click', () => {
                     popup.classList.remove('show');
                     popup.classList.add('hide');
-                    setTimeout(() => {
-                        popup.classList.add('hidden');
-                        popup.classList.remove('hide');
-                    }, 300);
                 });
             }, 3000);
         }
