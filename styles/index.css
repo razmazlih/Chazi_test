@@ -122,7 +122,7 @@ main {
 }
 
 .message-content {
-    max-width: 70%;
+    max-width: 60%;
     padding: 15px 25px;
     position: relative;
     white-space: pre-wrap;
