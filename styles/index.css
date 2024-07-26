@@ -8,7 +8,6 @@
 }
 
 body {
-    overflow-x: hidden;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 120px 1fr;
@@ -361,9 +360,9 @@ main {
 
     .left-header {
         display: flex;
-        width: 100%;
+        width: 95%;
         justify-content: space-around;
-        gap: 10px;
+        gap: 0;
         position: absolute;
         bottom: 70px;
         align-items: center;
@@ -374,9 +373,9 @@ main {
     }
 
     .chat-window {
-        width: calc(100% - 20px);
+        width: 100%;
         height: calc(100vh - 420px);
-        padding-bottom: 110px;
+        padding: 0 0 110px 0;
     }
 
     .input-bar {
