@@ -383,13 +383,14 @@ main {
 
     .chat-window {
         width: 100%;
-        height: calc(100vh - 420px);
-        padding: 0 0 110px 0;
+        height: calc(100vh - 330px);
+        padding: 0 0 90px 0;
     }
 
     .input-bar {
+        position: absolute;
         width: calc(100% - 30px); /* Full width minus some margin */
-        bottom: 105px;
+        bottom: 85px;
         right: 10px;
         padding: 5px;
         box-shadow: 0 0 20px rgb(180, 180, 180);
@@ -409,7 +410,7 @@ main {
 
     .footer-nav {
         width: 100vw;
-        height: 50px;
+        height: 30px;
         padding: 10px 0;
         bottom: 0;
     }
