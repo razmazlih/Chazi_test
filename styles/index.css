@@ -35,7 +35,7 @@ header::after {
     right: 30px;
     bottom: 25px;
     height: 2px;
-    background-color: #F45C47;
+    background-color: #f45c47;
     border-radius: 5px;
 }
 
@@ -144,7 +144,7 @@ main {
 }
 
 .message.received .message-content {
-    background-color: #AF1993;
+    background-color: #af1993;
     color: white;
     margin-left: 0px;
 }
@@ -207,7 +207,7 @@ main {
     left: 0;
     width: 100%;
     height: 3px;
-    background: linear-gradient(to right, #ffbb00 , #F45C47, #AF1993);
+    background: linear-gradient(to right, #ffbb00, #f45c47, #af1993);
 }
 
 .nav-item {
@@ -218,7 +218,7 @@ main {
 }
 
 .nav-item.active {
-    background: linear-gradient(to right, #ffbb00, #F45C47);
+    background: linear-gradient(to right, #ffbb00, #f45c47);
     border-radius: 50%;
     padding: 15px;
     width: 50px;
@@ -300,7 +300,6 @@ main {
 }
 
 @media (max-width: 767px) {
-
     body {
         /* grid-template-rows: 185px calc(100vh - 235px); */
         width: 100vw;
@@ -408,7 +407,6 @@ main {
         bottom: 0;
         width: 100%;
     }
-
 
     .footer-nav {
         width: 100vw;

@@ -25,7 +25,7 @@ body {
 
 .form-title {
     margin-bottom: 20px;
-    color: #F45C47;
+    color: #f45c47;
 }
 
 .input-field {
@@ -38,13 +38,13 @@ body {
 }
 
 .input-field:focus {
-    border-color: #F45C47;
+    border-color: #f45c47;
 }
 
 .submit-button {
     width: 100%;
     padding: 10px;
-    background-color: #F45C47;
+    background-color: #f45c47;
     color: white;
     border: none;
     border-radius: 5px;
@@ -57,7 +57,7 @@ body {
 }
 
 .redirect-link {
-    color: #F45C47;
+    color: #f45c47;
     text-decoration: none;
 }
 
@@ -66,7 +66,7 @@ body {
 }
 
 .message-container {
-    color: #F45C47;
+    color: #f45c47;
 }
 
 .google-button {
