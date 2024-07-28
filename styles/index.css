@@ -217,45 +217,14 @@ main {
     position: relative;
 }
 
-.nav-item.active {
-    background: linear-gradient(to right, #ffbb00, #f45c47);
-    border-radius: 50%;
-    padding: 15px;
-    width: 50px;
-    height: 50px;
-    font-size: 30px;
-    text-align: center;
-    position: relative;
-    bottom: 10px;
+.footer-nav img {
+    width: 55px;
+    height: 55px;
 }
 
-.icon {
-    font-family: FontAwesome;
-}
-
-.book-icon::before {
-    content: '\f02d'; /* Example icon, replace with actual icon code */
-}
-
-.trophy-icon::before {
-    content: '\f091'; /* Example icon, replace with actual icon code */
-}
-
-.home-icon::before {
-    content: '\f015'; /* Example icon, replace with actual icon code */
-}
-
-.certificate-icon::before {
-    content: '\f0a3'; /* Example icon, replace with actual icon code */
-}
-
-.search-icon::before {
-    content: '\f002'; /* Example icon, replace with actual icon code */
-}
-
-.footer-nav .active .icon {
-    color: #fff;
-    font-size: 30px;
+.footer-nav .active img {
+    width: 100px;
+    height: 100px;
 }
 
 .popup {
@@ -413,6 +382,22 @@ main {
         height: 30px;
         padding: 10px 0;
         bottom: 0;
+    }
+
+    .footer-nav img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .footer-nav .active img {
+        width: 80px;
+        height: 80px;
+        margin: 0 -30px 5px -30px;
+    }
+
+    .home-icon::before {
+        position: relative;
+        left: 40px;
     }
 
     .nav-item {
