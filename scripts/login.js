@@ -116,5 +116,10 @@ function showRedMessage(message, user) {
     }
 }
 
+const testButton = document.querySelector('button');
+
+testButton.addEventListener('click', () => {window.location.href = 'welcome.html'})
+
+
 document.getElementById('login-form').addEventListener('submit', loginUser);
 document.getElementById('google-login').addEventListener('click', googleLogin);
