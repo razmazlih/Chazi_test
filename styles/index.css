@@ -270,17 +270,28 @@ main {
 
 @media (max-width: 767px) {
     body {
-        /* grid-template-rows: 185px calc(100vh - 235px); */
+        /* overflow: hidden; */
         width: 100vw;
         background-color: #f0f2f5;
+        position: absolute;
+        top: 0;
+        bottom: 50px;
     }
 
     main {
+        position: absolute;
+        top: 67px;
+        bottom: 90px;
+        width: 100%;
         background-image: none;
     }
 
     .main-content {
+        position: absolute;
+        top: 0;
+        bottom: 100px;
         max-width: 100%;
+        height: 100%;
         width: 100%;
         padding: 0;
     }
@@ -349,12 +360,11 @@ main {
     }
 
     .chat-window {
-        position: relative;
-        top: 64px;
         width: 100%;
-        height: calc(100vh - 435px);
+        height: 100%;
         padding: 0 0 90px 0;
         margin: 0;
+        /* border: solid; */
     }
 
     .input-bar {
