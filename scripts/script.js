@@ -9,6 +9,7 @@ import {
     doc,
     getDoc,
     getDocs,
+    limit
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 async function doesCollectionExist(userId) {
@@ -97,13 +98,48 @@ function addMessage(type, text, picUrl, timestamp) {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
+async function getLastTenMessages(userId) {
+    const messagesRef = collection(firestore, `users/${userId}/messages`);
+    const q = query(messagesRef, orderBy('timestamp', 'desc'), limit(6));
+
+    try {
+        const querySnapshot = await getDocs(q);
+        const messages = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+            let myType;
+            if (data.type === "received") {
+                myType = 'botMessage';
+            } else {
+                myType = 'userMessage';
+            }
+            return {
+                role: myType,
+                content: data.text,
+            };
+        });
+
+        messages.reverse();
+
+        return messages;
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+        return [];
+    }
+}
+
 async function getBotResponse(userId, message) {
     let botResponse;
 
+    let lastMessages = await getLastTenMessages(userId);
     try {
         const docRef = doc(firestore, `users/${userId}/summary/mySummary`);
         const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
+        if (!docSnap.exists() && lastMessages.length > 0) {
+            botResponse = await sendMessage(message, '', lastMessages);
+        } else if (docSnap.exists() && lastMessages.length > 0) {
+            const selfSummary = docSnap.data().content;
+            botResponse = await sendMessage(message, selfSummary, lastMessages);
+        } else if (docSnap.exists()) {
             const selfSummary = docSnap.data().content;
             botResponse = await sendMessage(message, selfSummary);
         } else {
@@ -206,14 +242,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const popup = document.getElementById('popup');
                 const getToKnowButton = document.getElementById('get-to-know');
                 const maybeLaterButton = document.getElementById('maybe-later');
-        
+
                 popup.classList.remove('hidden');
                 popup.classList.add('show');
-        
+
                 getToKnowButton.addEventListener('click', () => {
                     window.location.href = 'survey.html';
                 });
-        
+
                 maybeLaterButton.addEventListener('click', () => {
                     popup.classList.remove('show');
                     popup.classList.add('hide');
