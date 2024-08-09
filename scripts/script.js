@@ -108,9 +108,9 @@ async function getLastTenMessages(userId) {
             const data = doc.data();
             let myType;
             if (data.type === "received") {
-                myType = 'botMessage';
+                myType = 'assistant';
             } else {
-                myType = 'userMessage';
+                myType = 'user';
             }
             return {
                 role: myType,
@@ -119,7 +119,7 @@ async function getLastTenMessages(userId) {
         });
 
         messages.reverse();
-
+        
         return messages;
     } catch (error) {
         console.error('Error fetching messages:', error);
