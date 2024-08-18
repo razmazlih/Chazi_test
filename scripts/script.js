@@ -9,7 +9,7 @@ import {
     doc,
     getDoc,
     getDocs,
-    limit
+    limit,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 async function doesCollectionExist(userId) {
@@ -107,7 +107,7 @@ async function getLastTenMessages(userId) {
         const messages = querySnapshot.docs.map((doc) => {
             const data = doc.data();
             let myType;
-            if (data.type === "received") {
+            if (data.type === 'received') {
                 myType = 'assistant';
             } else {
                 myType = 'user';
@@ -119,7 +119,9 @@ async function getLastTenMessages(userId) {
         });
 
         messages.reverse();
-        
+
+        messages = { role: 'allMasseges', content: messages }
+
         return messages;
     } catch (error) {
         console.error('Error fetching messages:', error);
@@ -153,7 +155,13 @@ async function getBotResponse(userId, message) {
     addMessageToFirebase(userId, 'received', botResponse);
 }
 
-async function sendMessage(userMessage, summary) {
+async function sendMessage(userMessage, summary, userHistoryMessages) {
+    // userHistoryMessages = '';
+
+    console.log(userMessage);
+    console.log(summary);
+    console.log(userHistoryMessages);
+
     const functionUrl =
         'https://europe-west1-chazi-b7b36.cloudfunctions.net/sendMessage';
 
@@ -162,7 +170,8 @@ async function sendMessage(userMessage, summary) {
 
     const body = JSON.stringify({
         message: userMessage,
-        summary: summary,
+        lifeSummary: summary,
+        historyMessages: userHistoryMessages,
     });
 
     const requestOptions = {
