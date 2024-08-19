@@ -171,21 +171,59 @@ main {
     color: black;
 }
 
-.send-button,
-.mic-button {
+.stickers-button,
+.mic-button,
+.send-button {
     background: none;
     border: none;
     cursor: pointer;
 }
 
-.send-button img,
-.mic-button img {
+.mic-button img,
+.send-button img {
     width: 30px;
     height: 30px;
 }
 
+.stickers-button img {
+    width: 27px;
+    height: 27px;
+}
+
+.stickers-button,
 .mic-button {
     margin-left: 5px;
+}
+
+.stickers-popup {
+    position: absolute;
+    bottom: 200px;
+    width: 100%;
+    max-width: 520px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.stickers-popup.show {
+    display: block;
+}
+
+.stickers-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+}
+
+.stickers-grid img {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
 }
 
 .footer-nav {
