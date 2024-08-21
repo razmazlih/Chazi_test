@@ -105,11 +105,23 @@ main {
     cursor: default; /* Prevents text cursor */
 }
 
-.message img {
+.profile-pic {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin: 0 10px;
+}
+
+.gif-message {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    margin: 5px 0;
+}
+
+.message.sentGif .message-content {
+    background: none;
+    padding: 0;
 }
 
 .sent {

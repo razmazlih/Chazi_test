@@ -93,11 +93,26 @@ async function loadMessagesFromFirebase(userId) {
 function addMessage(type, text, picUrl, timestamp) {
     const message = document.createElement('div');
     message.classList.add('message', type);
-    const imgSrc = type === 'sent' ? picUrl : 'images/bot_image.png';
+    const imgSrc = type === 'sent' || type === 'sentGif' ? picUrl : 'images/bot_image.png';
     const timeString = timestamp
         ? new Date(timestamp.seconds * 1000).toLocaleTimeString('he-IL')
         : '';
-    message.innerHTML = `<img src="${imgSrc}" alt="${type}"><div class="${type} message-content"><p>${text}</p><span class="timestamp">${timeString}</span></div>`;
+
+    // טיפול בהודעות GIF
+    if (type === 'sentGif') {
+        message.innerHTML = `
+            <img src="${imgSrc}" alt="${type}" class="profile-pic">
+            <div class="${type} message-content">
+                <img src="${text}" alt="GIF" class="gif-message">
+                <span class="timestamp">${timeString}</span>
+            </div>
+        `;
+    } 
+    // טיפול בהודעות רגילות
+    else {
+        message.innerHTML = `<img src="${imgSrc}" alt="${type}" class="profile-pic"><div class="${type} message-content"><p>${text}</p><span class="timestamp">${timeString}</span></div>`;
+    }
+
     const chatWindow = document.querySelector('.chat-window');
     chatWindow.appendChild(message);
     chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -224,10 +239,19 @@ async function addEventListeners(userId) {
 
     let imageHtml = '';
     allGiffLinks.forEach(link => {
-        imageHtml += `<img src="${link}" alt="Gif" style="width: 20%; height: auto; margin: 10px;">`;
+        imageHtml += `<img src="${link}" alt="Gif" class="gif-image" style="width: 20%; height: auto; margin: 10px;" data-url="${link}">`;
     });
 
     gifContainer.innerHTML = imageHtml;
+
+    // Add click event to each GIF
+    document.querySelectorAll('.gif-image').forEach(gif => {
+        gif.addEventListener('click', () => {
+            const gifUrl = gif.getAttribute('data-url');
+            addMessage('sentGif', gifUrl);
+            addMessageToFirebase(userId, 'sentGif', gifUrl);
+        });
+    });
 
     sendButton.addEventListener('click', () => {
         const messageText = inputBar.value.trim();
@@ -238,8 +262,6 @@ async function addEventListeners(userId) {
             getBotResponse(userId, messageText);
         }
     });
-
-
 
     inputBar.addEventListener(
         'keypress',
