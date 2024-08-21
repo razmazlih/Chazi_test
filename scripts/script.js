@@ -313,10 +313,6 @@ async function getGiffFolderLinks() {
     }
 }
 
-function sendGiff(giffLink) {
-    addMessage(userId, 'sent', giffLink)
-}
-
 document.querySelector('.stickers-button').addEventListener('click', () => {
     const stickersPopup = document.getElementById('stickers-popup');
     stickersPopup.classList.toggle('show');
