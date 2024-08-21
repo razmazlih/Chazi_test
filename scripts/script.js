@@ -1,4 +1,4 @@
-import { auth, firestore, secretKey } from './firebase.js';
+import { auth, firestore, storage } from './firebase.js';
 import {
     collection,
     addDoc,
@@ -11,6 +11,11 @@ import {
     getDocs,
     limit,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
+import {
+    ref,
+    listAll,
+    getDownloadURL,
+} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js';
 
 async function doesCollectionExist(userId) {
     const surveysCollectionRef = collection(
@@ -120,7 +125,7 @@ async function getLastTenMessages(userId) {
 
         messages.reverse();
 
-        messages = { role: 'allMasseges', content: messages }
+        messages = { role: 'allMasseges', content: messages };
 
         return messages;
     } catch (error) {
@@ -208,9 +213,21 @@ function debounce(func, wait) {
     };
 }
 
-function addEventListeners(userId) {
+async function addEventListeners(userId) {
     const inputBar = document.querySelector('.input-bar input');
     const sendButton = document.querySelector('.send-button');
+    const gifContainer = document.getElementById('stickers-popup');
+
+    const allGiffLinks = await getGiffFolderLinks();
+
+    gifContainer.innerHTML = '';
+
+    let imageHtml = '';
+    allGiffLinks.forEach(link => {
+        imageHtml += `<img src="${link}" alt="Gif" style="width: 20%; height: auto; margin: 10px;">`;
+    });
+
+    gifContainer.innerHTML = imageHtml;
 
     sendButton.addEventListener('click', () => {
         const messageText = inputBar.value.trim();
@@ -221,6 +238,8 @@ function addEventListeners(userId) {
             getBotResponse(userId, messageText);
         }
     });
+
+
 
     inputBar.addEventListener(
         'keypress',
@@ -272,6 +291,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
     }
 });
+
+async function getGiffFolderLinks() {
+    const giffFolderRef = ref(storage, 'giff/');
+    let imageLinks = [];
+
+    try {
+        // רשימת כל האובייקטים בתיקייה
+        const result = await listAll(giffFolderRef);
+        
+        const promises = result.items.map(async (itemRef) => {
+            const downloadURL = await getDownloadURL(itemRef);
+            return downloadURL;
+        });
+
+        imageLinks = await Promise.all(promises);
+
+        return imageLinks;
+    } catch (error) {
+        console.error("Error fetching links:", error);
+    }
+}
+
+function sendGiff(giffLink) {
+    addMessage(userId, 'sent', giffLink)
+}
 
 document.querySelector('.stickers-button').addEventListener('click', () => {
     const stickersPopup = document.getElementById('stickers-popup');
