@@ -226,6 +226,7 @@ async function addEventListeners(userId) {
     const inputBar = document.querySelector('.input-bar input');
     const sendButton = document.querySelector('.send-button');
     const gifContainer = document.getElementById('stickers-popup');
+    const giffButton = document.querySelector('.stickers-button');
 
     const allGiffLinks = await getGiffFolderLinks();
 
@@ -271,6 +272,12 @@ async function addEventListeners(userId) {
             }
         }, 300)
     );
+
+    giffButton.addEventListener('click', () => {
+        const stickersPopup = document.getElementById('stickers-popup');
+        stickersPopup.classList.toggle('show');
+        stickersPopup.classList.toggle('hidden');
+    });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -328,9 +335,3 @@ async function getGiffFolderLinks() {
         console.error("Error fetching links:", error);
     }
 }
-
-document.querySelector('.stickers-button').addEventListener('click', () => {
-    const stickersPopup = document.getElementById('stickers-popup');
-    stickersPopup.classList.toggle('show');
-    stickersPopup.classList.toggle('hidden');
-});

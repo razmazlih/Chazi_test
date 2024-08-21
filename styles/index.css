@@ -209,7 +209,7 @@ main {
 
 .stickers-popup {
     position: absolute;
-    bottom: 200px;
+    bottom: 150px;
     width: 100%;
     max-width: 520px;
     background-color: white;
