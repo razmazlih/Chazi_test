@@ -176,12 +176,6 @@ async function getBotResponse(userId, message) {
 }
 
 async function sendMessage(userMessage, summary, userHistoryMessages) {
-    // userHistoryMessages = '';
-
-    console.log(userMessage);
-    console.log(summary);
-    console.log(userHistoryMessages);
-
     const functionUrl =
         'https://europe-west1-chazi-b7b36.cloudfunctions.net/sendMessage';
 
