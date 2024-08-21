@@ -245,6 +245,11 @@ async function addEventListeners(userId) {
             const gifUrl = gif.getAttribute('data-url');
             addMessage('sentGif', gifUrl);
             addMessageToFirebase(userId, 'sentGif', gifUrl);
+
+            // Close the stickers popup after sending a GIF
+            const stickersPopup = document.getElementById('stickers-popup');
+            stickersPopup.classList.remove('show');
+            stickersPopup.classList.add('hidden');
         });
     });
 
