@@ -147,7 +147,7 @@ async function getLastTenMessages(userId) {
 
     try {
         const querySnapshot = await getDocs(q);
-        const messages = querySnapshot.docs.map((doc) => {
+        let messages = querySnapshot.docs.map((doc) => {
             const data = doc.data();
             let myType;
             if (data.type === 'received') {
