@@ -108,6 +108,16 @@ function addMessage(type, text, picUrl, timestamp) {
             </div>
         `;
     } 
+    
+    else if (type === 'receivedGif') {
+        message.innerHTML = `
+            <img src="${imgSrc}" alt="${type}" class="profile-pic">
+            <div class="${type} message-content">
+                <img src="${text}" alt="GIF" class="gif-message">
+                <span class="timestamp">${timeString}</span>
+            </div>
+        `;
+    }
     // טיפול בהודעות רגילות
     else {
         message.innerHTML = `<img src="${imgSrc}" alt="${type}" class="profile-pic"><div class="${type} message-content"><p>${text}</p><span class="timestamp">${timeString}</span></div>`;
@@ -116,6 +126,17 @@ function addMessage(type, text, picUrl, timestamp) {
     const chatWindow = document.querySelector('.chat-window');
     chatWindow.appendChild(message);
     chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+async function sendRandomGif(userId) {
+    try {
+        const gifLinks = await getGiffFolderLinks();
+        const randomGif = gifLinks[Math.floor(Math.random() * gifLinks.length)];
+        addMessage('sentGif', randomGif);
+        addMessageToFirebase(userId, 'receivedGif', randomGif);
+    } catch (error) {
+        console.error("Error sending random GIF:", error);
+    }
 }
 
 async function getLastTenMessages(userId) {
@@ -239,17 +260,17 @@ async function addEventListeners(userId) {
 
     gifContainer.innerHTML = imageHtml;
 
-    // Add click event to each GIF
     document.querySelectorAll('.gif-image').forEach(gif => {
         gif.addEventListener('click', () => {
             const gifUrl = gif.getAttribute('data-url');
             addMessage('sentGif', gifUrl);
             addMessageToFirebase(userId, 'sentGif', gifUrl);
 
-            // Close the stickers popup after sending a GIF
             const stickersPopup = document.getElementById('stickers-popup');
             stickersPopup.classList.remove('show');
             stickersPopup.classList.add('hidden');
+
+            sendRandomGif(userId);
         });
     });
 

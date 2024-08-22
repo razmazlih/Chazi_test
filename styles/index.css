@@ -119,6 +119,19 @@ main {
     margin: 5px 0;
 }
 
+/* עיצוב מיוחד ל-GIF שהתקבל מהבוט */
+.message.receivedGif {
+    flex-direction: row-reverse;
+}
+
+.message.receivedGif .message-content {
+    background-color: #af1993;
+    border-radius: 0 30px 30px 30px;
+    padding: 10px;
+    
+    display: flex;
+}
+
 .message.sentGif .message-content {
     background: none;
     padding: 0;
