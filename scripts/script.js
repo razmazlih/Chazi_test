@@ -306,6 +306,28 @@ async function addEventListeners(userId) {
         stickersPopup.classList.toggle('show');
         stickersPopup.classList.toggle('hidden');
     });
+
+    const isSurvey = await doesCollectionExist(userId);
+
+    if (!isSurvey) {
+        setTimeout(() => {
+            const popup = document.getElementById('popup');
+            const getToKnowButton = document.getElementById('get-to-know');
+            const maybeLaterButton = document.getElementById('maybe-later');
+
+            popup.classList.remove('hidden');
+            popup.classList.add('show');
+
+            getToKnowButton.addEventListener('click', () => {
+                window.location.href = 'survey.html';
+            });
+
+            maybeLaterButton.addEventListener('click', () => {
+                popup.classList.remove('show');
+                popup.classList.add('hide');
+            });
+        }, 3000);
+    }
 }
 
 async function getGiffFolderLinks() {
@@ -335,27 +357,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadMessagesFromFirebase(userId);
         addEventListeners(userId);
 
-        const isSurvey = await doesCollectionExist(userId);
-
-        if (!isSurvey) {
-            setTimeout(() => {
-                const popup = document.getElementById('popup');
-                const getToKnowButton = document.getElementById('get-to-know');
-                const maybeLaterButton = document.getElementById('maybe-later');
-
-                popup.classList.remove('hidden');
-                popup.classList.add('show');
-
-                getToKnowButton.addEventListener('click', () => {
-                    window.location.href = 'survey.html';
-                });
-
-                maybeLaterButton.addEventListener('click', () => {
-                    popup.classList.remove('show');
-                    popup.classList.add('hide');
-                });
-            }, 3000);
-        }
     } catch (error) {
         console.error(
             'Error checking auth state or getting survey document:',
