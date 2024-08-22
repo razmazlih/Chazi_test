@@ -125,6 +125,9 @@ function addMessage(type, text, picUrl, timestamp) {
     const chatWindow = document.querySelector('.chat-window');
     chatWindow.appendChild(message);
     chatWindow.scrollTop = chatWindow.scrollHeight;
+    setTimeout(() => {
+        chatWindow.scrollTop = chatWindow.scrollHeight
+    }, 1000)
 }
 
 async function sendRandomGif(userId) {
