@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>דף צ'אט</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./styles/welcome.css">
-    <script type="module" src="scripts/welcome.js"></script>
+    <link rel="stylesheet" href="./styles/index.css">
+    <script type="module" src="scripts/script.js"></script>
 </head>
 
 <body>
@@ -32,16 +32,20 @@
                     <h2>בוא נכיר</h2>
                 </div>
                 <div class="popup-content">
-                    <p> כדי שנוכל לבנות לך מענה מותאם מומלץ להירשם  </p>
-                    <button id="get-to-know" class="btn"> הירשם </button>
+                    <p>אנחנו רוצים להכיר אותך יותר טוב. האם אתה מוכן להתחיל?</p>
+                    <button id="get-to-know" class="btn">בוא נכיר</button>
                     <button id="maybe-later" class="btn dry">אולי אחר כך</button>
                 </div>
             </div>
             <div class="footer">
                 <div class="input-bar">
                     <input type="text" class="input-message" placeholder="הקלד הודעה...">
+                    <button class="stickers-button"><img src="./images/stickers.png" alt="Stickers"></button>
                     <button class="mic-button"><img src="./images/mic.png" alt="Mic"></button>
                     <button class="send-button"><img src="./images/send.png" alt="Send"></button>
+                </div>
+                <div id="stickers-popup" class="stickers-popup hidden">
+                    <div class="stickers-grid"></div>
                 </div>
                 <div class="footer-nav">
                     <a href="https://www.working.vision/" class="nav-item">
