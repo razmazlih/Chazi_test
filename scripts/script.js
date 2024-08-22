@@ -93,7 +93,8 @@ async function loadMessagesFromFirebase(userId) {
 function addMessage(type, text, picUrl, timestamp) {
     const message = document.createElement('div');
     message.classList.add('message', type);
-    const imgSrc = type === 'sent' || type === 'sentGif' ? picUrl : 'images/bot_image.png';
+    const imgSrc =
+        type === 'sent' || type === 'sentGif' ? picUrl : 'images/bot_image.png';
     const timeString = timestamp
         ? new Date(timestamp.seconds * 1000).toLocaleTimeString('he-IL')
         : '';
@@ -107,9 +108,7 @@ function addMessage(type, text, picUrl, timestamp) {
                 <span class="timestamp">${timeString}</span>
             </div>
         `;
-    } 
-    
-    else if (type === 'receivedGif') {
+    } else if (type === 'receivedGif') {
         message.innerHTML = `
             <img src="${imgSrc}" alt="${type}" class="profile-pic">
             <div class="${type} message-content">
@@ -135,7 +134,7 @@ async function sendRandomGif(userId) {
         addMessage('sentGif', randomGif);
         addMessageToFirebase(userId, 'receivedGif', randomGif);
     } catch (error) {
-        console.error("Error sending random GIF:", error);
+        console.error('Error sending random GIF:', error);
     }
 }
 
@@ -254,13 +253,13 @@ async function addEventListeners(userId) {
     gifContainer.innerHTML = '';
 
     let imageHtml = '';
-    allGiffLinks.forEach(link => {
+    allGiffLinks.forEach((link) => {
         imageHtml += `<img src="${link}" alt="Gif" class="gif-image" style="width: 20%; height: auto; margin: 10px;" data-url="${link}">`;
     });
 
     gifContainer.innerHTML = imageHtml;
 
-    document.querySelectorAll('.gif-image').forEach(gif => {
+    document.querySelectorAll('.gif-image').forEach((gif) => {
         gif.addEventListener('click', () => {
             const gifUrl = gif.getAttribute('data-url');
             addMessage('sentGif', gifUrl);
@@ -306,6 +305,27 @@ async function addEventListeners(userId) {
     });
 }
 
+async function getGiffFolderLinks() {
+    const giffFolderRef = ref(storage, 'giff/');
+    let imageLinks = [];
+
+    try {
+        // רשימת כל האובייקטים בתיקייה
+        const result = await listAll(giffFolderRef);
+
+        const promises = result.items.map(async (itemRef) => {
+            const downloadURL = await getDownloadURL(itemRef);
+            return downloadURL;
+        });
+
+        imageLinks = await Promise.all(promises);
+
+        return imageLinks;
+    } catch (error) {
+        console.error('Error fetching links:', error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const userId = await checkAuthState();
@@ -340,24 +360,3 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
     }
 });
-
-async function getGiffFolderLinks() {
-    const giffFolderRef = ref(storage, 'giff/');
-    let imageLinks = [];
-
-    try {
-        // רשימת כל האובייקטים בתיקייה
-        const result = await listAll(giffFolderRef);
-        
-        const promises = result.items.map(async (itemRef) => {
-            const downloadURL = await getDownloadURL(itemRef);
-            return downloadURL;
-        });
-
-        imageLinks = await Promise.all(promises);
-
-        return imageLinks;
-    } catch (error) {
-        console.error("Error fetching links:", error);
-    }
-}
