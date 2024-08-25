@@ -105,3 +105,9 @@ async function loadUsers() {
         usersTableBody.appendChild(row);
     });
 }
+
+// Placeholder for GIF editing logic
+// Add any specific functionality related to GIF editing in this section
+document.getElementById('edit-gif-button')?.addEventListener('click', () => {
+    window.location.href = 'gif_editor.html';
+});

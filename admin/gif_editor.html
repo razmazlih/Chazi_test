@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>עורך GIF</title>
+    <link rel="stylesheet" href="./styles/gif_editor.css">
+</head>
+
+<body class="gif-body">
+    <header class="gif-header">
+        <h1 class="gif-header-title">עורך GIF</h1>
+        <button id="back" class="gif-back-button">חזרה לדף הניהול</button>
+    </header>
+
+    <main class="gif-main">
+        <section class="gif-section">
+            <form id="uploadGifForm" class="form-container">
+                <label for="gifFiles" class="form-title">בחר או גרור קבצי GIF:</label>
+                <div id="dropZone" class="drop-zone">
+                    גרור את קבצי ה-GIF לכאן או לחץ לבחירת קבצים
+                    <input type="file" id="gifFiles" name="gifFiles" class="input-field" accept="image/gif" multiple hidden>
+                </div>
+                <button type="submit" class="submit-button">העלה</button>
+                <div id="message" class="message-container"></div>
+            </form>
+        </section>
+
+        <section class="gif-section">
+            <h2>GIFs קיימים</h2>
+            <button id="deleteSelectedButton" class="delete-selected-button" disabled>מחק נבחרים</button>
+
+            <div id="gifContainer" class="form-container"></div>
+        </section>
+    </main>
+
+    <script type="module" src="../scripts/gif_editor.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,199 @@
+/* General Body Styles */
+.gif-body {
+    font-family: Arial, sans-serif;
+    background-color: #e6f7ff;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+/* Header Styles */
+.gif-header {
+    background-color: #3399ff;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.gif-header-title {
+    margin: 0;
+}
+
+.gif-back-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.gif-back-button:hover {
+    background-color: #cc0000;
+}
+
+/* Main Container Styles */
+.gif-main {
+    padding: 2rem;
+    padding-top: 100px; /* Adjust for the fixed header */
+}
+
+/* Form Container Styles */
+.form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* Form Title and Input Fields */
+.form-title {
+    margin-bottom: 10px;
+    color: #d94f0b;
+}
+
+.input-field {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    border-color: #d94f0b;
+}
+
+/* Submit Button */
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #d94f0b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #c44405;
+}
+
+/* Message Container */
+.message-container {
+    color: #d94f0b;
+    margin-top: 20px;
+}
+
+/* Existing GIFs Grid */
+#gifContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* GIF Item Styles */
+.gif-item {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.gif-item.selected {
+    border: 2px solid #3399ff;
+}
+
+.gif-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Delete Button */
+.delete-button {
+    padding: 5px 10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.delete-button:hover {
+    background-color: #cc0000;
+}
+
+/* Delete Selected Button */
+.delete-selected-button {
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+}
+
+.delete-selected-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.delete-selected-button:hover:not(:disabled) {
+    background-color: #cc0000;
+}
+
+/* Enhanced Drop Zone Styles */
+.drop-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 30px 0;
+    margin-bottom: 10px;
+    border: 2px dashed #007bff;
+    border-radius: 15px;
+    background-color: #f0f8ff;
+    color: #007bff;
+    font-size: 1.2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+.drop-zone:hover {
+    background-color: #e6f7ff;
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.2);
+    border-color: #3399ff;
+}
+
+.drop-zone.dragover {
+    background-color: #d1eaff;
+    border-color: #0056b3;
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.4);
+}
+
+.drop-zone input {
+    display: none;
+}
