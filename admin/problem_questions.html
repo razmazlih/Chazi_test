@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ניהול שאלות הכרת בעיה</title>
+    <link rel="stylesheet" href="./styles/problem_questions.css">
+</head>
+
+<body class="chat-body">
+    <header class="chat-header">
+        <h1 class="chat-header-title">ניהול שאלות הכרת בעיה</h1>
+        <button id="back" class="chat-back-button">חזרה לדף הניהול</button>
+    </header>
+
+    <main class="chat-main">
+        <section class="chat-section">
+            <!-- Form for adding a new problem question -->
+            <!-- Modify the form to only include the question -->
+            <form id="addProblemQuestionForm" class="form-container">
+                <label for="question" class="form-title">שאלה:</label>
+                <input type="text" id="question" name="question" class="input-field" required>
+                <button type="submit" class="submit-button">הוסף</button>
+                <div id="message" class="message-container"></div>
+            </form>
+        </section>
+
+        <section class="chat-section">
+            <!-- Display existing problem questions -->
+            <h2>שאלות קיימות</h2>
+            <div id="problemQuestionsContainer" class="form-container">
+                <!-- השאלות יטענו כאן -->
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="../scripts/add_problem_question.js"></script>
+    <script type="module" src="../scripts/problem_questions.js"></script>
+</body>
+
+</html>
