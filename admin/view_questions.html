@@ -4,24 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>צפייה בשאלות</title>
+    <title>הוסף וצפה בשאלות</title>
     <link rel="stylesheet" href="./styles/view_questions.css">
 </head>
 
 <body class="chat-body">
     <header class="chat-header">
-        <h1 class="chat-header-title">צפייה בשאלות</h1>
+        <h1 class="chat-header-title">הוסף וצפה בשאלות</h1>
         <button id="back" class="chat-back-button">חזרה לדף הניהול</button>
     </header>
-    <main class="chat-main">
-        <a href="add_question.html" class="admin-add-question-link">הוסף שאלה חדשה</a>
 
+    <main class="chat-main">
+        <!-- Form for adding a question -->
         <section class="chat-section">
+            <form id="addQuestionForm" class="form-container">
+                <label for="question" class="form-title">שאלה:</label>
+                <input type="text" id="question" name="question" class="input-field" required>
+
+                <label for="answerType" class="form-title">סוג תשובה:</label>
+                <select id="answerType" name="answerType" class="input-field" required>
+                    <option value="טקסט">טקסט</option>
+                    <option value="בחירה-מרובה">בחירה מרובה</option>
+                </select>
+
+                <div id="multipleChoiceContainer" style="display: none;">
+                    <label for="choices" class="form-title">אופציות:</label>
+                    <input type="text" id="choice1" name="choices" class="input-field" placeholder="אופציה 1">
+                    <input type="text" id="choice2" name="choices" class="input-field" placeholder="אופציה 2">
+                    <input type="text" id="choice3" name="choices" class="input-field" placeholder="אופציה 3">
+                    <input type="text" id="choice4" name="choices" class="input-field" placeholder="אופציה 4">
+                </div>
+
+                <button type="submit" class="submit-button">הוסף שאלה</button>
+                <div id="message" class="message-container"></div>
+            </form>
+        </section>
+
+        <!-- Section for viewing existing questions -->
+        <section class="chat-section">
+            <h2>שאלות קיימות</h2>
             <div id="questionsContainer" class="form-container">
                 <!-- השאלות יטענו כאן -->
             </div>
         </section>
     </main>
+
     <script type="module" src="../scripts/view_questions.js"></script>
 </body>
 

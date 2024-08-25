@@ -1,4 +1,4 @@
-/* עיצוב ללוח הניהול */
+/* עיצוב כללי */
 .chat-body {
     font-family: Arial, sans-serif;
     background-color: #e6f7ff;
@@ -57,6 +57,46 @@
     margin-top: 20px;
 }
 
+/* עיצוב טופס הוספת שאלה */
+.form-title {
+    margin-bottom: 20px;
+    color: #d94f0b;
+}
+
+.input-field {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    border-color: #d94f0b;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #d94f0b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #c44405;
+}
+
+.message-container {
+    color: #d94f0b;
+    margin-top: 20px;
+}
+
+/* עיצוב עבור הצגת שאלות */
 .question-item {
     margin-bottom: 20px;
 }
@@ -73,19 +113,4 @@
 
 .delete-button:hover {
     background-color: #cc0000;
-}
-
-.admin-add-question-link {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.admin-add-question-link:hover {
-    background-color: #45a049;
 }

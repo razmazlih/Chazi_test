@@ -1,49 +1,80 @@
-import { auth, firestore } from './firebase.js';
+import { firestore } from './firebase.js';
 import {
     collection,
+    addDoc,
     getDocs,
     deleteDoc,
+    serverTimestamp,
     doc,
     query,
     where,
-    getDoc,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
-
-async function checkAdmin() {
-    const user = auth.currentUser;
-    if (!user) {
-        window.location.href = '../login.html';
-        return;
-    }
-
-    const userDoc = await getDoc(doc(firestore, 'users', user.uid));
-    if (userDoc.exists()) {
-        const userData = userDoc.data();
-        if (userData.role !== 'מנהל') {
-            window.location.href = '../index.html';
-        }
-    } else {
-        window.location.href = '../index.html';
-    }
-}
-
-auth.onAuthStateChanged((user) => {
-    if (user) {
-        checkAdmin().catch((error) => {
-            console.error('Error checking admin status:', error);
-        });
-    } else {
-        window.location.href = '../login.html';
-    }
-});
 
 document.getElementById('back').addEventListener('click', () => {
     window.location.href = 'admin_dashboard.html';
 });
 
-const questionsContainer = document.getElementById('questionsContainer');
+document.getElementById('answerType').addEventListener('change', () => {
+    const answerType = document.getElementById('answerType').value;
+    if (answerType === 'טקסט') {
+        document.getElementById('multipleChoiceContainer').style.display =
+            'none';
+    } else if (answerType === 'בחירה-מרובה') {
+        document.getElementById('multipleChoiceContainer').style.display =
+            'block';
+    }
+});
+
+document
+    .getElementById('addQuestionForm')
+    .addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const question = document.getElementById('question').value;
+        const answerType = document.getElementById('answerType').value;
+        let answer = null;
+
+        if (answerType === 'בחירה-מרובה') {
+            answer = [
+                document.getElementById('choice1').value,
+                document.getElementById('choice2').value,
+                document.getElementById('choice3').value,
+                document.getElementById('choice4').value,
+            ].filter((choice) => choice !== '');
+        }
+
+        const messageElement = document.getElementById('message');
+
+        try {
+            const docData = {
+                question: question,
+                answerType: answerType,
+                timestamp: serverTimestamp(),
+            };
+
+            if (answerType === 'בחירה-מרובה') {
+                docData.answer = answer;
+            }
+
+            await addDoc(collection(firestore, 'quests'), docData);
+            alert('השאלה נוספה בהצלחה!');
+        } catch (error) {
+            console.error('Error adding document: ', error);
+            messageElement.textContent = 'שגיאה בהוספת השאלה.';
+            messageElement.style.color = 'red';
+        }
+
+        document.getElementById('addQuestionForm').reset();
+        document.getElementById('multipleChoiceContainer').style.display =
+            'none';
+
+        loadQuestions();
+    });
 
 async function loadQuestions() {
+    const questionsContainer = document.getElementById('questionsContainer');
+    questionsContainer.innerHTML = '';
+
     try {
         const querySnapshot = await getDocs(collection(firestore, 'quests'));
         querySnapshot.forEach((doc) => {
