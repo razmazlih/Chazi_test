@@ -7,6 +7,7 @@ import {
     getDocs,
     query,
     orderBy,
+    updateDoc,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
 
 document.getElementById('logout').addEventListener('click', () => {
@@ -52,8 +53,9 @@ async function loadUsers() {
     const usersCollection = collection(firestore, 'users');
     const usersQuery = query(usersCollection, orderBy('role'));
     const usersSnapshot = await getDocs(usersQuery);
-    const usersList = usersSnapshot.docs.map((doc) => doc.data());
+    const usersList = usersSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
+    const currentUser = auth.currentUser.uid;
     const usersTableBody = document
         .getElementById('users-table')
         .getElementsByTagName('tbody')[0];
@@ -71,7 +73,23 @@ async function loadUsers() {
         row.appendChild(emailCell);
 
         const roleCell = document.createElement('td');
-        roleCell.textContent = user.role;
+        roleCell.style.cursor = currentUser === user.uid ? 'not-allowed' : 'pointer';
+        roleCell.style.color = user.role === 'מנהל' ? '#d94f0b' : '#007bff';
+        roleCell.innerHTML = `<span>${user.role}</span> <i class="fas fa-edit"></i>`;
+        if (currentUser !== user.uid) {
+            roleCell.onclick = async () => {
+                const newRole = user.role === 'מנהל' ? 'משתמש' : 'מנהל';
+                roleCell.innerHTML = `<span>${newRole}</span> <i class="fas fa-edit"></i>`;
+                roleCell.style.color = newRole === 'מנהל' ? '#d94f0b' : '#007bff';
+                try {
+                    await updateRole(user.id, newRole);
+                } catch (error) {
+                    console.error('Error updating role:', error);
+                    roleCell.innerHTML = `<span>${user.role}</span> <i class="fas fa-edit"></i>`;
+                    roleCell.style.color = user.role === 'מנהל' ? '#d94f0b' : '#007bff';
+                }
+            };
+        }
         row.appendChild(roleCell);
 
         const profilePicCell = document.createElement('td');
@@ -106,6 +124,10 @@ async function loadUsers() {
     });
 }
 
+async function updateRole(userId, newRole) {
+    const userDocRef = doc(firestore, 'users', userId);
+    await updateDoc(userDocRef, { role: newRole });
+}
 // Placeholder for GIF editing logic
 // Add any specific functionality related to GIF editing in this section
 document.getElementById('edit-gif-button')?.addEventListener('click', () => {

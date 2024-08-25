@@ -128,3 +128,41 @@
 .admin-add-question-link:active {
     transform: scale(1); /* חזרה לגודל המקורי בעת לחיצה */
 }
+
+.admin-users-table td {
+    position: relative;
+}
+
+.admin-users-table td i {
+    margin-left: 8px;
+    color: #666;
+}
+
+.admin-users-table td[style*='cursor: pointer'] i {
+    visibility: visible;
+}
+
+.admin-users-table td[style*='cursor: not-allowed'] i {
+    visibility: hidden;
+}
+
+.admin-users-table td[style*='cursor: pointer']:hover {
+    background-color: #e9e9e9;
+}
+
+.admin-users-table td[style*='cursor: not-allowed'] {
+    color: #aaa;
+}
+
+.admin-users-table td[style*='cursor: not-allowed']:hover {
+    background-color: transparent;
+}
+
+.admin-users-table td span {
+    font-weight: bold;
+}
+
+.fas.fa-edit {
+    visibility: hidden;
+    font-size: 14px;
+}
