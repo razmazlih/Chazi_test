@@ -179,68 +179,11 @@ async function sendRandomGif(userId) {
     }
 }
 
-async function getLastTenMessages(userId) {
-    const messagesRef = collection(firestore, `users/${userId}/messages`);
-    const q = query(messagesRef, orderBy('timestamp', 'desc'), limit(6));
-
-    try {
-        const querySnapshot = await getDocs(q);
-        let messages = querySnapshot.docs.map((doc) => {
-            const data = doc.data();
-            let myType;
-            if (data.type === 'received') {
-                myType = 'assistant';
-            } else {
-                myType = 'user';
-            }
-            return {
-                role: myType,
-                content: data.text,
-            };
-        });
-
-        messages.reverse();
-
-        messages = { role: 'allMasseges', content: messages };
-
-        return messages;
-    } catch (error) {
-        console.error('Error fetching messages:', error);
-        return [];
-    }
-}
-
 async function getLifeSummary(userId) {
     const docRef = doc(firestore, `users/${userId}/summary/mySummary`);
     const docSnap = await getDoc(docRef);
     const selfSummary = docSnap.data().content;
     return selfSummary;
-}
-
-async function getBotResponse(userId, message) {
-    let botResponse;
-
-    let lastMessages = await getLastTenMessages(userId);
-    try {
-        const docRef = doc(firestore, `users/${userId}/summary/mySummary`);
-        const docSnap = await getDoc(docRef);
-        if (!docSnap.exists() && lastMessages.length > 0) {
-            botResponse = await sendMessage(message, '', lastMessages);
-        } else if (docSnap.exists() && lastMessages.length > 0) {
-            const selfSummary = docSnap.data().content;
-            botResponse = await sendMessage(message, selfSummary, lastMessages);
-        } else if (docSnap.exists()) {
-            const selfSummary = docSnap.data().content;
-            botResponse = await sendMessage(message, selfSummary);
-        } else {
-            botResponse = await sendMessage(message);
-        }
-    } catch (error) {
-        console.error('Error getting document:', error);
-    }
-
-    addMessage('received', botResponse);
-    addMessageToFirebase(userId, 'received', botResponse);
 }
 
 async function getBestTwoQuestions(userInput, questions) {
@@ -286,53 +229,6 @@ async function getSolutionAnswer(
 
     const data = await response.json();
     return data.solution;
-}
-
-async function sendMessage(userMessage, summary, userHistoryMessages) {
-    const functionUrl =
-        'https://europe-west1-chazi-b7b36.cloudfunctions.net/sendMessage';
-
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    const body = JSON.stringify({
-        message: userMessage,
-        lifeSummary: summary,
-        historyMessages: userHistoryMessages,
-    });
-
-    const requestOptions = {
-        method: 'POST',
-        headers: headers,
-        body: body,
-    };
-
-    try {
-        const response = await fetch(functionUrl, requestOptions);
-
-        if (!response.ok) {
-            console.error('Server response:', response);
-            throw new Error(`Server error: ${response.status}`);
-        }
-
-        const result = await response.json();
-        return result.response;
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-}
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
 }
 
 async function addEventListeners(userId) {
