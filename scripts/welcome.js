@@ -15,6 +15,9 @@ import {
     getDownloadURL,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js';
 
+const url = 'https://europe-west1-chazi-b7b36.cloudfunctions.net';
+
+
 async function checkAuthState() {
     let userId = localStorage.getItem("userId");
 
@@ -36,7 +39,190 @@ async function checkAuthState() {
     }
 }
 
+async function waitForUserInput(userId) {
+
+    const myUrl = './images/my_image.png';
+
+    return new Promise((resolve) => {
+        const inputBar = document.querySelector('.input-bar input');
+        const sendButton = document.querySelector('.send-button');
+
+        function handleUserInput() {
+            const userMessage = inputBar.value.trim();
+            if (userMessage) {
+                addMessage('sent', userMessage, myUrl);
+                addMessageToFirebase(userId, 'sent', userMessage);
+                inputBar.value = '';
+                inputBar.removeEventListener('keypress', handleEnterKey);
+                sendButton.removeEventListener('click', handleUserInput);
+                resolve(userMessage);
+            }
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                handleUserInput();
+            }
+        }
+
+        inputBar.removeEventListener('keypress', handleEnterKey);
+        sendButton.removeEventListener('click', handleUserInput);
+
+        inputBar.addEventListener('keypress', handleEnterKey);
+        sendButton.addEventListener('click', handleUserInput);
+    });
+}
+
+async function checkWorkProblem(message) {
+    try {
+        const response = await fetch(`${url}/isWorkRelatedIssue`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: message }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.isWorkRelated;
+    } catch (error) {
+        console.error('Error:', error);
+        return false;
+    }
+}
+
+async function getAllProblemQuestions() {
+    try {
+        const questionsCollectionRef = collection(
+            firestore,
+            'problem_questions'
+        );
+        const querySnapshot = await getDocs(questionsCollectionRef);
+
+        const questionsList = [];
+
+        querySnapshot.forEach((doc) => {
+            questionsList.push(doc.data().question);
+        });
+
+        return questionsList;
+    } catch (error) {
+        console.error('Error fetching problem questions:', error);
+        return [
+            "אילו בעיות או אתגרים אתה נתקל בהם בעבודה שלך ביום יום?",
+            "כיצד אתה ניגש לפתרון בעיות בעבודה, ומהם הכלים או השיטות שאתה משתמש בהם?"
+          ];;
+    }
+}
+
+async function getBestTwoQuestions(userInput, questions) {
+    const response = await fetch(`${url}/chooseQuestions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userInput: userInput,
+            questions: questions,
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    return data.questions;
+}
+
+async function getSolutionAnswer(
+    userProblem,
+    systemQuestionsAnswers,
+) {
+    const response = await fetch(`${url}/generateSolution`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userProblem: userProblem,
+            systemQuestionsAnswers: systemQuestionsAnswers
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    return data.solution;
+}
+
+async function startConversation(userId) {
+    let botMessage = 'היי אני חזי, איך אני יכול לעזור לך היום?';
+    addMessage('received', botMessage);
+    addMessageToFirebase(userId, 'received', botMessage);
+
+    let userResponse = await waitForUserInput(userId);
+
+    let isProblem = await checkWorkProblem(userResponse);
+
+    while (!isProblem) {
+        botMessage = 'האם יש לך בעיה בעבודה שאני אוכל לעזור?';
+        addMessage('received', botMessage);
+        addMessageToFirebase(userId, 'received', botMessage);
+
+        userResponse = await waitForUserInput(userId);
+        isProblem = await checkWorkProblem(userResponse);
+    }
+
+    const questionPool = await getAllProblemQuestions();
+    const selectedQuestions = await getBestTwoQuestions(userResponse, questionPool);
+
+    let questionsList = selectedQuestions.split("XXX");
+
+    addMessage('received', questionsList[0]);
+    addMessageToFirebase(userId, 'received', questionsList[0]);
+    const userAnswer1 = await waitForUserInput(userId);
+
+    addMessage('received', questionsList[1]);
+    addMessageToFirebase(userId, 'received', questionsList[1]);
+    const userAnswer2 = await waitForUserInput(userId);
+
+    addMessage('received', 'חזי בונה לך תשובה עכשיו...');
+    addMessageToFirebase(userId, 'received', 'חזי בונה לך תשובה עכשיו...');
+
+    const solution = await getSolutionAnswer(
+        userResponse,
+        `${questionsList[0]}: ${userAnswer1}, ${questionsList[1]}: ${userAnswer2}`
+    );
+
+    addMessage('received', solution);
+    addMessageToFirebase(userId, 'received', solution);
+
+    startConversation(userId)
+}
+
 async function addMessageToFirebase(userId, type, text) {
+
+    if (text === 'היי אני חזי, איך אני יכול לעזור לך היום?') {
+        const messagesCollectionRef = collection(firestore, `guests/${userId}/messages`);
+        const q = query(messagesCollectionRef, orderBy('timestamp', 'desc'), limit(1));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            const lastMessage = querySnapshot.docs[0].data().text;
+
+            if (lastMessage === 'היי אני חזי, איך אני יכול לעזור לך היום?') {
+                return;
+            }
+        }
+    }
+
     try {
         await addDoc(collection(firestore, `guests/${userId}/messages`), {
             type,
@@ -116,105 +302,7 @@ async function sendRandomGif(userId) {
     }
 }
 
-async function getLastTenMessages(userId) {
-    const messagesRef = collection(firestore, `guests/${userId}/messages`);
-    const q = query(messagesRef, orderBy('timestamp', 'desc'), limit(6));
-
-    try {
-        const querySnapshot = await getDocs(q);
-        let messages = querySnapshot.docs.map((doc) => {
-            const data = doc.data();
-            let myType;
-            if (data.type === 'received') {
-                myType = 'assistant';
-            } else {
-                myType = 'user';
-            }
-            return {
-                role: myType,
-                content: data.text,
-            };
-        });
-
-        messages.reverse();
-
-        messages = { role: 'allMasseges', content: messages };
-
-        return messages;
-    } catch (error) {
-        console.error('Error fetching messages:', error);
-        return [];
-    }
-}
-
-async function getBotResponse(userId, message) {
-    let botResponse;
-
-    let lastMessages = await getLastTenMessages(userId);
-    try {
-        if (lastMessages.length > 0) {
-            botResponse = await sendMessage(message, '', lastMessages);
-        } else {
-            botResponse = await sendMessage(message);
-        }
-    } catch (error) {
-        console.error('Error getting document:', error);
-    }
-
-    addMessage('received', botResponse);
-    addMessageToFirebase(userId, 'received', botResponse);
-}
-
-async function sendMessage(userMessage, summary, userHistoryMessages) {
-    const functionUrl =
-        'https://europe-west1-chazi-b7b36.cloudfunctions.net/sendMessage';
-
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    const body = JSON.stringify({
-        message: userMessage,
-        lifeSummary: summary,
-        historyMessages: userHistoryMessages,
-    });
-
-    const requestOptions = {
-        method: 'POST',
-        headers: headers,
-        body: body,
-    };
-
-    try {
-        const response = await fetch(functionUrl, requestOptions);
-
-        if (!response.ok) {
-            console.error('Server response:', response);
-            throw new Error(`Server error: ${response.status}`);
-        }
-
-        const result = await response.json();
-        return result.response;
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-}
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
 async function addEventListeners(userId) {
-    const inputBar = document.querySelector('.input-bar input');
-    const sendButton = document.querySelector('.send-button');
     const gifContainer = document.getElementById('stickers-popup');
     const giffButton = document.querySelector('.stickers-button');
 
@@ -242,31 +330,6 @@ async function addEventListeners(userId) {
             sendRandomGif(userId);
         });
     });
-
-    sendButton.addEventListener('click', () => {
-        const messageText = inputBar.value.trim();
-        if (messageText) {
-            addMessage('sent', messageText);
-            addMessageToFirebase(userId, 'sent', messageText);
-            inputBar.value = '';
-            getBotResponse(userId, messageText);
-        }
-    });
-
-    inputBar.addEventListener(
-        'keypress',
-        debounce((e) => {
-            if (e.key === 'Enter') {
-                const messageText = inputBar.value.trim();
-                if (messageText) {
-                    addMessage('sent', messageText);
-                    addMessageToFirebase(userId, 'sent', messageText);
-                    inputBar.value = '';
-                    getBotResponse(userId, messageText);
-                }
-            }
-        }, 300)
-    );
 
     giffButton.addEventListener('click', () => {
         const stickersPopup = document.getElementById('stickers-popup');
@@ -302,10 +365,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadMessagesFromFirebase(userId);
         addEventListeners(userId);
 
+            await startConversation(userId);
     } catch (error) {
-        console.error(
-            'Error checking auth state or getting survey document:',
-            error
-        );
+        console.error('Error initializing page:', error);
     }
 });
