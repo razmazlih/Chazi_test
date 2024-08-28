@@ -361,7 +361,10 @@ async function getAllProblemQuestions() {
         return questionsList;
     } catch (error) {
         console.error('Error fetching problem questions:', error);
-        return [];
+        return [
+            "אילו בעיות או אתגרים אתה נתקל בהם בעבודה שלך ביום יום?",
+            "כיצד אתה ניגש לפתרון בעיות בעבודה, ומהם הכלים או השיטות שאתה משתמש בהם?"
+          ];;
     }
 }
 
@@ -413,6 +416,8 @@ async function startConversation(userId) {
 
     addMessage('received', solution);
     addMessageToFirebase(userId, 'received', solution);
+
+    startConversation(userId)
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
