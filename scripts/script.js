@@ -19,6 +19,29 @@ import {
 
 const url = 'https://europe-west1-chazi-b7b36.cloudfunctions.net';
 
+async function doesCollectionExist(userId) {
+    const surveysCollectionRef = collection(
+        firestore,
+        `users/${userId}/surveys`
+    );
+    const questsCollectionRef = collection(firestore, 'quests');
+
+    const surveysSnapshot = await getDocs(surveysCollectionRef);
+    const questsSnapshot = await getDocs(questsCollectionRef);
+
+    const surveysData = surveysSnapshot.docs.map((doc) => doc.data());
+    const questsData = questsSnapshot.docs.map((doc) => doc.data());
+
+    const sortFunction = (a, b) =>
+        JSON.stringify(a).localeCompare(JSON.stringify(b));
+    surveysData.sort(sortFunction);
+    questsData.sort(sortFunction);
+
+    const areCollectionsEqual = surveysData.length === questsData.length;
+
+    return areCollectionsEqual;
+}
+
 async function isIdForUser(userId) {
     const surveysCollectionRef = collection(
         firestore,
@@ -439,23 +462,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error adding event listeners:', error);
         }
 
-        setTimeout(() => {
-            const popup = document.getElementById('popup');
-            const getToKnowButton = document.getElementById('get-to-know');
-            const maybeLaterButton = document.getElementById('maybe-later');
         
-            popup.classList.remove('hidden');
-            popup.classList.add('show');
-        
-            getToKnowButton.addEventListener('click', () => {
-                window.location.href = 'survey.html';
-            });
-        
-            maybeLaterButton.addEventListener('click', () => {
-                popup.classList.remove('show');
-                popup.classList.add('hide');
-            });
-        }, 3000);
+        if (doesCollectionExist(userId)) {
+            setTimeout(() => {
+                const popup = document.getElementById('popup');
+                const getToKnowButton = document.getElementById('get-to-know');
+                const maybeLaterButton = document.getElementById('maybe-later');
+            
+                popup.classList.remove('hidden');
+                popup.classList.add('show');
+            
+                getToKnowButton.addEventListener('click', () => {
+                    window.location.href = 'survey.html';
+                });
+            
+                maybeLaterButton.addEventListener('click', () => {
+                    popup.classList.remove('show');
+                    popup.classList.add('hide');
+                });
+            }, 3000);
+        }
 
         try {
             await startConversation(userId);
