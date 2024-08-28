@@ -17,7 +17,7 @@ import {
     getDownloadURL,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js';
 
-const url = 'http://10.0.0.19:1233';
+const url = 'https://chazi-server.onrender.com';
 
 async function isIdForUser(userId) {
     const surveysCollectionRef = collection(
