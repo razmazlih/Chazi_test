@@ -57,6 +57,21 @@ function checkAuthState() {
 }
 
 async function addMessageToFirebase(userId, type, text) {
+    if (text === 'היי אני חזי, איך אני יכול לעזור לך היום?') {
+        const messagesCollectionRef = collection(firestore, `users/${userId}/messages`);
+        const q = query(messagesCollectionRef, orderBy('timestamp', 'desc'), limit(1));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            const lastMessage = querySnapshot.docs[0].data().text;
+
+            if (lastMessage === 'היי אני חזי, איך אני יכול לעזור לך היום?') {
+                return;
+            }
+        }
+    }
+
+    // אם ההודעה לא נשלחה בעבר, הוסף אותה ל-Firebase
     try {
         await addDoc(collection(firestore, `users/${userId}/messages`), {
             type,
@@ -353,6 +368,7 @@ async function getAllProblemQuestions() {
 async function startConversation(userId) {
     let botMessage = 'היי אני חזי, איך אני יכול לעזור לך היום?';
     addMessage('received', botMessage);
+    addMessageToFirebase(userId, 'received', botMessage);
 
     let userProblem = await waitForUserInput(userId);
 
@@ -386,6 +402,8 @@ async function startConversation(userId) {
     const userAnswer2 = await waitForUserInput(userId);
 
     addMessage('received', 'חזי בונה לך תשובה עכשיו...');
+    addMessageToFirebase(userId, 'received', 'חזי בונה לך תשובה עכשיו...');
+
 
     const solution = await getSolutionAnswer(
         userProblem,
