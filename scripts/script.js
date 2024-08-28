@@ -439,6 +439,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error adding event listeners:', error);
         }
 
+        setTimeout(() => {
+            const popup = document.getElementById('popup');
+            const getToKnowButton = document.getElementById('get-to-know');
+            const maybeLaterButton = document.getElementById('maybe-later');
+        
+            popup.classList.remove('hidden');
+            popup.classList.add('show');
+        
+            getToKnowButton.addEventListener('click', () => {
+                window.location.href = 'survey.html';
+            });
+        
+            maybeLaterButton.addEventListener('click', () => {
+                popup.classList.remove('show');
+                popup.classList.add('hide');
+            });
+        }, 3000);
+
         try {
             await startConversation(userId);
         } catch (error) {
