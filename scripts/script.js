@@ -17,7 +17,9 @@ import {
     getDownloadURL,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js';
 
-async function doesCollectionExist(userId) {
+const url = 'http://10.0.0.19:1233';
+
+async function isIdForUser(userId) {
     const surveysCollectionRef = collection(
         firestore,
         `users/${userId}/surveys`
@@ -82,11 +84,47 @@ async function loadMessagesFromFirebase(userId) {
     const chatWindow = document.querySelector('.chat-window');
 
     onSnapshot(q, (snapshot) => {
-        chatWindow.innerHTML = ''; // Clear chat window
+        chatWindow.innerHTML = '';
         snapshot.forEach((doc) => {
             const messageData = doc.data();
             addMessage(messageData.type, messageData.text, myUrl);
         });
+    });
+}
+
+async function waitForUserInput(userId) {
+
+    const myUrl = await getProfilePicUrl(userId);
+
+    return new Promise((resolve) => {
+        const inputBar = document.querySelector('.input-bar input');
+        const sendButton = document.querySelector('.send-button');
+
+        function handleUserInput() {
+            const userMessage = inputBar.value.trim();
+            if (userMessage) {
+                addMessage('sent', userMessage, myUrl);
+                addMessageToFirebase(userId, 'sent', userMessage);
+                inputBar.value = '';
+                inputBar.removeEventListener('keypress', handleEnterKey);
+                sendButton.removeEventListener('click', handleUserInput);
+                resolve(userMessage);
+            }
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                handleUserInput();
+            }
+        }
+
+        // הסרת מאזינים קיימים (אם קיימים)
+        inputBar.removeEventListener('keypress', handleEnterKey);
+        sendButton.removeEventListener('click', handleUserInput);
+
+        // הוספת מאזינים
+        inputBar.addEventListener('keypress', handleEnterKey);
+        sendButton.addEventListener('click', handleUserInput);
     });
 }
 
@@ -126,8 +164,8 @@ function addMessage(type, text, picUrl, timestamp) {
     chatWindow.appendChild(message);
     chatWindow.scrollTop = chatWindow.scrollHeight;
     setTimeout(() => {
-        chatWindow.scrollTop = chatWindow.scrollHeight
-    }, 1000)
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }, 1000);
 }
 
 async function sendRandomGif(userId) {
@@ -172,6 +210,13 @@ async function getLastTenMessages(userId) {
     }
 }
 
+async function getLifeSummary(userId) {
+    const docRef = doc(firestore, `users/${userId}/summary/mySummary`);
+    const docSnap = await getDoc(docRef);
+    const selfSummary = docSnap.data().content;
+    return selfSummary;
+}
+
 async function getBotResponse(userId, message) {
     let botResponse;
 
@@ -196,6 +241,51 @@ async function getBotResponse(userId, message) {
 
     addMessage('received', botResponse);
     addMessageToFirebase(userId, 'received', botResponse);
+}
+
+async function getBestTwoQuestions(userInput, questions) {
+    const response = await fetch(`${url}/choose-questions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user_input: userInput,
+            questions: questions,
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    return data.selected_questions;
+}
+
+async function getSolutionAnswer(
+    userProblem,
+    systemQuestionsAnswers,
+    userLifeSummary = null
+) {
+    const response = await fetch(`${url}/generate-solution`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user_problem: userProblem,
+            system_questions_answers: systemQuestionsAnswers,
+            user_life_summary: userLifeSummary,
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    return data.solution;
 }
 
 async function sendMessage(userMessage, summary, userHistoryMessages) {
@@ -276,30 +366,30 @@ async function addEventListeners(userId) {
         });
     });
 
-    sendButton.addEventListener('click', () => {
-        const messageText = inputBar.value.trim();
-        if (messageText) {
-            addMessage('sent', messageText);
-            addMessageToFirebase(userId, 'sent', messageText);
-            inputBar.value = '';
-            getBotResponse(userId, messageText);
-        }
-    });
+    // sendButton.addEventListener('click', () => {
+    //     const messageText = inputBar.value.trim();
+    //     if (messageText) {
+    //         addMessage('sent', messageText);
+    //         addMessageToFirebase(userId, 'sent', messageText);
+    //         inputBar.value = '';
+    //         getBotResponse(userId, messageText);
+    //     }
+    // });
 
-    inputBar.addEventListener(
-        'keypress',
-        debounce((e) => {
-            if (e.key === 'Enter') {
-                const messageText = inputBar.value.trim();
-                if (messageText) {
-                    addMessage('sent', messageText);
-                    addMessageToFirebase(userId, 'sent', messageText);
-                    inputBar.value = '';
-                    getBotResponse(userId, messageText);
-                }
-            }
-        }, 300)
-    );
+    // inputBar.addEventListener(
+    //     'keypress',
+    //     debounce((e) => {
+    //         if (e.key === 'Enter') {
+    //             const messageText = inputBar.value.trim();
+    //             if (messageText) {
+    //                 addMessage('sent', messageText);
+    //                 addMessageToFirebase(userId, 'sent', messageText);
+    //                 inputBar.value = '';
+    //                 getBotResponse(userId, messageText);
+    //             }
+    //         }
+    //     }, 300)
+    // );
 
     giffButton.addEventListener('click', () => {
         const stickersPopup = document.getElementById('stickers-popup');
@@ -307,7 +397,7 @@ async function addEventListeners(userId) {
         stickersPopup.classList.toggle('hidden');
     });
 
-    const isSurvey = await doesCollectionExist(userId);
+    const isSurvey = await isIdForUser(userId);
 
     if (!isSurvey) {
         setTimeout(() => {
@@ -351,16 +441,130 @@ async function getGiffFolderLinks() {
     }
 }
 
+async function checkWorkProblem(message) {
+    try {
+        const response = await fetch(`${url}/check_work_issue`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: message }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.work_related;
+    } catch (error) {
+        console.error('Error:', error);
+        return false;
+    }
+}
+
+async function getAllProblemQuestions() {
+    try {
+        const questionsCollectionRef = collection(
+            firestore,
+            'problem_questions'
+        );
+        const querySnapshot = await getDocs(questionsCollectionRef);
+
+        const questionsList = [];
+
+        querySnapshot.forEach((doc) => {
+            questionsList.push(doc.data().question);
+        });
+
+        return questionsList;
+    } catch (error) {
+        console.error('Error fetching problem questions:', error);
+        return [];
+    }
+}
+
+async function startConversation(userId) {
+    let botMessage = 'היי אני חזי, איך אני יכול לעזור לך היום?';
+    addMessage('received', botMessage);
+
+    let userProblem = await waitForUserInput(userId);
+
+    let isProblem = await checkWorkProblem(userProblem);    
+
+    while (!isProblem) {
+        botMessage = 'האם יש לך בעיה בעבודה שאני אוכל לעזור?';
+        addMessage('received', botMessage);
+        addMessageToFirebase(userId, 'received', botMessage);
+
+        userProblem = await waitForUserInput(userId);
+
+        isProblem = await checkWorkProblem(userProblem);
+    }
+
+    const questionPool = await getAllProblemQuestions();
+
+    const selectedQuestions = await getBestTwoQuestions(
+        userProblem,
+        questionPool
+    );
+
+    let questionsList = selectedQuestions.split("XXX");
+    console.log(questionsList);
+
+    addMessage('received', questionsList[0]);
+    addMessageToFirebase(userId, 'received', questionsList[0]);
+    const userAnswer1 = await waitForUserInput(userId);
+
+    addMessage('received', questionsList[1]);
+    addMessageToFirebase(userId, 'received', questionsList[1]);
+    const userAnswer2 = await waitForUserInput(userId);
+
+    addMessage('received', 'חזי בונה לך תשובה עכשיו...');
+
+    const solution = await getSolutionAnswer(
+        userProblem,
+        `${selectedQuestions[0]}: ${userAnswer1}, ${selectedQuestions[1]}: ${userAnswer2}`,
+        await getLifeSummary(userId)
+    );
+
+    addMessage('received', solution);
+    addMessageToFirebase(userId, 'received', solution);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const userId = await checkAuthState();
-        loadMessagesFromFirebase(userId);
-        addEventListeners(userId);
+        if (!userId) {
+            throw new Error('User ID not found');
+        }
 
+        // Loading messages
+        try {
+            await loadMessagesFromFirebase(userId);
+        } catch (error) {
+            console.error('Error loading messages:', error);
+            // Optionally display an error message to the user
+        }
+
+        // Adding event listeners
+        try {
+            await addEventListeners(userId);
+        } catch (error) {
+            console.error('Error adding event listeners:', error);
+            // Optionally display an error message to the user
+        }
+
+        // Start the conversation
+        try {
+            await startConversation(userId);
+        } catch (error) {
+            console.error('Error starting conversation:', error);
+            // Optionally display an error message to the user
+        }
     } catch (error) {
-        console.error(
-            'Error checking auth state or getting survey document:',
-            error
-        );
+        console.error('Error checking auth state or initializing page:', error);
+        // Redirect to login page or display an error message
+        window.location.href = 'login.html';
     }
 });
