@@ -17,7 +17,7 @@ import {
     getDownloadURL,
 } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js';
 
-const url = 'https://chazi-server.onrender.com';
+const url = 'https://europe-west1-chazi-b7b36.cloudfunctions.net';
 
 async function isIdForUser(userId) {
     const surveysCollectionRef = collection(
@@ -118,11 +118,9 @@ async function waitForUserInput(userId) {
             }
         }
 
-        // הסרת מאזינים קיימים (אם קיימים)
         inputBar.removeEventListener('keypress', handleEnterKey);
         sendButton.removeEventListener('click', handleUserInput);
 
-        // הוספת מאזינים
         inputBar.addEventListener('keypress', handleEnterKey);
         sendButton.addEventListener('click', handleUserInput);
     });
@@ -137,7 +135,6 @@ function addMessage(type, text, picUrl, timestamp) {
         ? new Date(timestamp.seconds * 1000).toLocaleTimeString('he-IL')
         : '';
 
-    // טיפול בהודעות GIF
     if (type === 'sentGif') {
         message.innerHTML = `
             <img src="${imgSrc}" alt="${type}" class="profile-pic">
@@ -155,7 +152,6 @@ function addMessage(type, text, picUrl, timestamp) {
             </div>
         `;
     }
-    // טיפול בהודעות רגילות
     else {
         message.innerHTML = `<img src="${imgSrc}" alt="${type}" class="profile-pic"><div class="${type} message-content"><p>${text}</p><span class="timestamp">${timeString}</span></div>`;
     }
@@ -187,7 +183,7 @@ async function getLifeSummary(userId) {
 }
 
 async function getBestTwoQuestions(userInput, questions) {
-    const response = await fetch(`${url}/choose-questions`, {
+    const response = await fetch(`${url}/chooseQuestions`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -203,7 +199,7 @@ async function getBestTwoQuestions(userInput, questions) {
     }
 
     const data = await response.json();
-    return data.selected_questions;
+    return data.questions;
 }
 
 async function getSolutionAnswer(
@@ -211,7 +207,7 @@ async function getSolutionAnswer(
     systemQuestionsAnswers,
     userLifeSummary = null
 ) {
-    const response = await fetch(`${url}/generate-solution`, {
+    const response = await fetch(`${url}/generateSolution`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -262,31 +258,6 @@ async function addEventListeners(userId) {
         });
     });
 
-    // sendButton.addEventListener('click', () => {
-    //     const messageText = inputBar.value.trim();
-    //     if (messageText) {
-    //         addMessage('sent', messageText);
-    //         addMessageToFirebase(userId, 'sent', messageText);
-    //         inputBar.value = '';
-    //         getBotResponse(userId, messageText);
-    //     }
-    // });
-
-    // inputBar.addEventListener(
-    //     'keypress',
-    //     debounce((e) => {
-    //         if (e.key === 'Enter') {
-    //             const messageText = inputBar.value.trim();
-    //             if (messageText) {
-    //                 addMessage('sent', messageText);
-    //                 addMessageToFirebase(userId, 'sent', messageText);
-    //                 inputBar.value = '';
-    //                 getBotResponse(userId, messageText);
-    //             }
-    //         }
-    //     }, 300)
-    // );
-
     giffButton.addEventListener('click', () => {
         const stickersPopup = document.getElementById('stickers-popup');
         stickersPopup.classList.toggle('show');
@@ -321,7 +292,6 @@ async function getGiffFolderLinks() {
     let imageLinks = [];
 
     try {
-        // רשימת כל האובייקטים בתיקייה
         const result = await listAll(giffFolderRef);
 
         const promises = result.items.map(async (itemRef) => {
@@ -339,7 +309,7 @@ async function getGiffFolderLinks() {
 
 async function checkWorkProblem(message) {
     try {
-        const response = await fetch(`${url}/check_work_issue`, {
+        const response = await fetch(`${url}/isWorkRelatedIssue`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -352,7 +322,7 @@ async function checkWorkProblem(message) {
         }
 
         const data = await response.json();
-        return data.work_related;
+        return data.isWorkRelated;
     } catch (error) {
         console.error('Error:', error);
         return false;
@@ -386,7 +356,10 @@ async function startConversation(userId) {
 
     let userProblem = await waitForUserInput(userId);
 
-    let isProblem = await checkWorkProblem(userProblem);    
+    let isProblem = await checkWorkProblem(userProblem);   
+    
+    console.log(isProblem);
+
 
     while (!isProblem) {
         botMessage = 'האם יש לך בעיה בעבודה שאני אוכל לעזור?';
@@ -396,6 +369,9 @@ async function startConversation(userId) {
         userProblem = await waitForUserInput(userId);
 
         isProblem = await checkWorkProblem(userProblem);
+
+        console.log(isProblem);
+        
     }
 
     const questionPool = await getAllProblemQuestions();
@@ -435,32 +411,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error('User ID not found');
         }
 
-        // Loading messages
         try {
             await loadMessagesFromFirebase(userId);
         } catch (error) {
             console.error('Error loading messages:', error);
-            // Optionally display an error message to the user
         }
 
-        // Adding event listeners
         try {
             await addEventListeners(userId);
         } catch (error) {
             console.error('Error adding event listeners:', error);
-            // Optionally display an error message to the user
         }
 
-        // Start the conversation
         try {
             await startConversation(userId);
         } catch (error) {
             console.error('Error starting conversation:', error);
-            // Optionally display an error message to the user
         }
     } catch (error) {
         console.error('Error checking auth state or initializing page:', error);
-        // Redirect to login page or display an error message
         window.location.href = 'login.html';
     }
 });
