@@ -189,7 +189,7 @@ async function getBestTwoQuestions(userInput, questions) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            user_input: userInput,
+            userInput: userInput,
             questions: questions,
         }),
     });
@@ -213,9 +213,9 @@ async function getSolutionAnswer(
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            user_problem: userProblem,
-            system_questions_answers: systemQuestionsAnswers,
-            user_life_summary: userLifeSummary,
+            userProblem: userProblem,
+            systemQuestionsAnswers: systemQuestionsAnswers,
+            userLifeSummary: userLifeSummary,
         }),
     });
 
@@ -357,9 +357,6 @@ async function startConversation(userId) {
     let userProblem = await waitForUserInput(userId);
 
     let isProblem = await checkWorkProblem(userProblem);   
-    
-    console.log(isProblem);
-
 
     while (!isProblem) {
         botMessage = 'האם יש לך בעיה בעבודה שאני אוכל לעזור?';
@@ -368,10 +365,7 @@ async function startConversation(userId) {
 
         userProblem = await waitForUserInput(userId);
 
-        isProblem = await checkWorkProblem(userProblem);
-
-        console.log(isProblem);
-        
+        isProblem = await checkWorkProblem(userProblem);        
     }
 
     const questionPool = await getAllProblemQuestions();
@@ -382,7 +376,6 @@ async function startConversation(userId) {
     );
 
     let questionsList = selectedQuestions.split("XXX");
-    console.log(questionsList);
 
     addMessage('received', questionsList[0]);
     addMessageToFirebase(userId, 'received', questionsList[0]);
