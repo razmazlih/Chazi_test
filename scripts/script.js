@@ -440,7 +440,9 @@ async function startConversation(userId) {
     addMessage('received', solution);
     addMessageToFirebase(userId, 'received', solution);
 
-    startConversation(userId)
+    setTimeout(() => {
+        startConversation(userId);
+    }, 3000);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
