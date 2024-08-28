@@ -195,6 +195,7 @@ async function startConversation(userId) {
 
     addMessage('received', 'חזי בונה לך תשובה עכשיו...');
     addMessageToFirebase(userId, 'received', 'חזי בונה לך תשובה עכשיו...');
+    showPopup();
 
     const solution = await getSolutionAnswer(
         userResponse,
@@ -204,7 +205,9 @@ async function startConversation(userId) {
     addMessage('received', solution);
     addMessageToFirebase(userId, 'received', solution);
 
-    startConversation(userId)
+    setTimeout(() => {
+        startConversation(userId)
+    }, 3000);
 }
 
 async function addMessageToFirebase(userId, type, text) {
@@ -357,6 +360,26 @@ async function getGiffFolderLinks() {
     } catch (error) {
         console.error('Error fetching links:', error);
     }
+}
+
+async function showPopup() {
+    setTimeout(() => {
+        const popup = document.getElementById('popup');
+        const getToKnowButton = document.getElementById('get-to-know');
+        const maybeLaterButton = document.getElementById('maybe-later');
+    
+        popup.classList.remove('hidden');
+        popup.classList.add('show');
+    
+        getToKnowButton.addEventListener('click', () => {
+            window.location.href = 'register.html';
+        });
+    
+        maybeLaterButton.addEventListener('click', () => {
+            popup.classList.remove('show');
+            popup.classList.add('hide');
+        });
+    }, 3000);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
